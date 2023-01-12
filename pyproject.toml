@@ -1,0 +1,135 @@
+[build-system]
+requires = [
+    'setuptools>=61,<=65.5.1;python_version<"3.12"',
+    'setuptools>=61;python_version>="3.12"',
+    'setuptools_scm[toml]>=6.2',
+    'wheel'
+]
+
+# ==============================================================================
+
+[project]
+name = 'aluso-labels-generator'
+authors = [
+     {name = 'Damien Nguyen', email = 'damien.nguyen@alumni.epfl.ch'}
+]
+description = 'A label generator for EPFL Alumni Eastern Switzerland events.'
+requires-python = '>= 3.8'
+license = {text= 'MIT License'}
+readme = 'README.md'
+classifiers = [
+    'License :: OSI Approved :: MIT',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11'
+]
+dynamic = ["version"]
+
+dependencies = [
+]
+
+[project.urls]
+'Documentation' = 'https://github.com/Takishima/AluSO-Label-Generator'
+'Download' = 'https://github.com/Takishima/AluSO-Label-Generator/releases'
+'Homepage' = 'https://github.com/Takishima/AluSO-Label-Generator'
+'Issue Tracker' = 'https://github.com/Takishima/AluSO-Label-Generator/issues'
+'Source' = 'https://github.com/Takishima/AluSO-Label-Generator'
+
+# ==============================================================================
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.dynamic]
+version = {file = "VERSION.txt"}
+
+[tool.setuptools.packages.find]
+include = ['aluso_labels']
+
+# --------------------------------------
+
+
+[tool.black]
+line-length = 120
+target-version = ['py39', 'py310', 'py311']
+skip-string-normalization = true
+
+# --------------------------------------
+
+[tool.coverage]
+    [tool.coverage.run]
+        omit = [
+            '*_test.py',
+            '*_fixtures.py'
+        ]
+
+# --------------------------------------
+
+[tool.pylint]
+    [tool.pylint.master]
+    ignore-patterns = [
+        '.*_test.py',
+        '.*_fixtures.py',
+    ]
+
+    init-hook = '''from pylint.config import find_default_config_files;\
+    import os, sys; \
+    sys.path.append(os.path.dirname(list(find_default_config_files())[0]))'''
+
+    [tool.pylint.basic]
+    good-names = []
+
+    [tool.pylint.format]
+    max-line-length = 120
+
+# --------------------------------------
+
+[tool.doc8]
+verbose = 0
+max_line_length = 120
+ignore-path-errors = [
+]
+
+# --------------------------------------
+
+[tool.isort]
+
+profile = "black"
+
+
+# --------------------------------------
+
+[tool.setuptools_scm]
+write_to = 'VERSION.txt'
+write_to_template = '{version}'
+parentdir_prefix_version = 'aluso-labels-'
+local_scheme = 'no-local-version'
+fallback_version = 'v1.0.0'
+
+
+# --------------------------------------
+
+[tool.yapf]
+column_limit = 120
+
+
+# --------------------------------------
+
+[tool.cibuildwheel]
+archs = ['auto64']
+build-frontend = 'build'
+build-verbosity = 1
+skip = 'pp* *-musllinux*'
+# environment = {}
+# before-test = []
+
+# test-command = 'python {package}/...'
+
+# Normal options, etc.
+manylinux-x86_64-image = 'manylinux2014'
+
+[[tool.cibuildwheel.overrides]]
+select = 'cp3{8,9}-*'
+manylinux-x86_64-image = 'manylinux2010'
