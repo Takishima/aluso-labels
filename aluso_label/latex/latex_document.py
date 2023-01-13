@@ -247,6 +247,7 @@ LatexDocument.ICON_EXTERNAL = textwrap.dedent(
         % 11 = 7 (radius arc) + 4 (radius circle)
         \draw (0, 5) arc (180:0:7) ++(-7, 11) circle (4);
         \draw (0, 5) -- (0, 0) -- ++(14, 0) -- ++(0, 5);
+        \draw[fill=white] (14, 3) circle (3) ++(-1.5, 0) -- +(3, 0) ++(1.5, -1.5) -- +(0, 3);
       \end{{tikzpicture}}%'''
 )
 
