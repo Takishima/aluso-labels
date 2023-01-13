@@ -121,5 +121,4 @@ repos:
         name: pylint-strict
         # exclude: (test_.*\.py)$
         args: [--score=n, --load-plugins=pylint_secure_coding_standard]
-        additional_dependencies: [pybind11>=2.9.2, wheel_filename, numpy, scipy, projectq, openfermion, sympy,
-                                  matplotlib, rich, pylint-secure-coding-standard]
+        additional_dependencies: [flask, pylint-secure-coding-standard]
