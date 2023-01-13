@@ -13,4 +13,15 @@
 #   OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Main module for AluSO label generator."""
+"""Event related definitions."""
+
+import enum
+
+
+class EventType(enum.Flag):
+    """Enumeration of event types."""
+
+    VISIT = enum.auto()
+    APERO = enum.auto()
+    DINNER = enum.auto()
+    NETWORKING = enum.auto()

@@ -13,4 +13,34 @@
 #   OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Main module for AluSO label generator."""
+"""People related definitions."""
+
+import dataclasses
+import enum
+
+
+class EventParticipation(enum.Flag):
+    """Enumeration of event participation types."""
+
+    VISIT = enum.auto()
+    POST_VISIT = enum.auto()
+    APERO = POST_VISIT
+
+
+@dataclasses.dataclass
+class Person:
+    """A person."""
+
+    first_name: str
+    last_name: str
+    is_contributor: bool
+    is_committee: bool
+    is_member: bool
+    participation_type: EventParticipation
+
+    def __post_init__(self):
+        """Post-initialization routine."""
+        if not self.is_member and self.is_committee:
+            raise RuntimeError('Cannot have a non-member as part of the committee!')
+        if not self.is_member and self.is_contributor:
+            raise RuntimeError('Cannot have a contributor non-member!')
