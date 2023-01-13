@@ -31,15 +31,21 @@ class EventParticipation(enum.Flag):
 class Person:
     """A person."""
 
+    aluso_uid: dataclasses.InitVar[str]
     first_name: str
     last_name: str
-    is_contributor: bool
-    is_committee: bool
     is_member: bool
+    is_contributor: bool
     participation_type: EventParticipation
+    is_committee: bool = dataclasses.field(init=False)
 
-    def __post_init__(self):
+    # EPFL Alumni UIDs of committee members
+    COMMITTEE_LIST = {'273017', '217959', '294350', '241470', '212952', '200295'}
+
+    def __post_init__(self, aluso_uid):
         """Post-initialization routine."""
+        self.is_committee = aluso_uid in Person.COMMITTEE_LIST
+
         if not self.is_member and self.is_committee:
             raise RuntimeError('Cannot have a non-member as part of the committee!')
         if not self.is_member and self.is_contributor:

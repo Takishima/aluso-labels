@@ -16,4 +16,13 @@
 
 """LaTeX utilities."""
 
-from .label_geometry import LABEL_GEOMETRY, LabelGeometry
+from ..event import EventType
+from ..people import Person
+from .label_geometry import LABEL_GEOMETRY, Label, LabelGeometry
+from .latex_document import LatexDocument
+
+
+def generate_latex_document(label_type: Label, event_type: EventType, people: list[Person]):
+    """Generate a LaTeX document."""
+    document = LatexDocument(label_type, event_type)
+    return document.generate(people)
