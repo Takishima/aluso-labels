@@ -16,10 +16,9 @@
 """CSV file upload utilities."""
 
 import csv
-import pprint
 from pathlib import Path
 
-from flask import flash, render_template, request
+from flask import flash, redirect, render_template, request, session, url_for
 
 from aluso_label.people import Person
 
@@ -80,9 +79,10 @@ def upload_file():
             )
 
         ticket_names = sorted(ticket_names)
-        return render_template(
-            'upload.html', people_data=pprint.pformat(people, indent=4), ticket_list=str(ticket_names)
-        )
+
+        session['people'] = people
+        session['ticket_names'] = ticket_names
+        return redirect(url_for('process_people_list'))
 
     return '''
     <!doctype html>

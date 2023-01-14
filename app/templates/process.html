@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block title %}Parameters for LaTeX generation{% endblock %}
+{% block content %}
+<h1 class="title">LaTeX generation settings</h1>
+
+<form action="" method="post" name="processing_settings">
+    <fieldset>
+        <legend>Ticket settings</legend>
+        {%for ticket, uid in zip(session['ticket_names'], session['ticket_ids'])%}
+        <fieldset>
+            <div class="form-group">
+                {{ticket}}
+                <div name="{{uid}}_choices">
+                    <div class="checkbox">
+                        <label for="{{uid}}_visit">
+                            <input type="checkbox" name="{{uid}}_visit" id="{{uid}}_visit" value="1" checked />
+                            Includes the Visit
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="{{uid}}_post_visit">
+                            <input type="checkbox" name="{{uid}}_post_visit" id="{{uid}}_post_visit" value="1" checked>
+                            Includes the meal/apero
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        {%endfor%}
+    </fieldset>
+
+    <fieldset>
+        <legend>Label settings</legend>
+        <div>
+            <select id="label_type" name="label_type" class="form-control">
+                {%for label_type, label_name in label_geometries%}
+                <option value="{{label_type}}">{{label_name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Event settings</legend>
+        <div>
+            Select what applies to your event
+            <div name="event_types">
+                <fieldset>
+                    <legend>Event type</legend>
+                    <div>
+                        <input type="radio" name="event_type_visit" id="event_type_company_visit" value="COMPANY_VISIT" checked/>
+                        <label for="event_type_company_visit">Company visit type event</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="event_type_visit" id="event_type_cultural_visit" value="CULTURAL_VISIT" />
+                        <label for="event_type_cultural_visit">Cultural visit type event</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="event_type_visit" id="event_type_degustation" value="DEGUSTATION" />
+                        <label for="event_type_degustation">Degustation type event</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="event_type_visit" id="event_type_networking" value="NETWORKING" />
+                        <label for="event_type_networking">Networking type event</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="event_type_visit" id="event_type_other" value="OTHER" />
+                        <label for="event_type_other">Other</label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Apéro/dinner?</legend>
+                    <div>
+                        <input type="radio" name="event_type_post_visit" id="event_food_none" value="NOTHING" checked/>
+                        <label for="event_food_none">Nothing</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="event_type_post_visit" id="event_food_apero" value="APERO" />
+                        <label for="event_food_apero">Has an apero</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="event_type_post_visit" id="event_food_meal" value="MEAL" />
+                        <label for="event_food_dinner">Has a meal</label>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="field is-grouped">
+        <input type="submit" value="Submit">
+    </div>
+</form>
+
+<h1>CSV data</h1>
+<pre>
+      {{session['people_str']}}
+</pre>
+{% endblock %}
