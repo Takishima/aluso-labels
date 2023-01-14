@@ -18,10 +18,20 @@
 import enum
 
 
-class EventType(enum.Flag):
+class EventFood(enum.Enum):
+    """Type of food provided at an event."""
+
+    NOTHING = enum.auto()
+    APERO = enum.auto()
+    MEAL = enum.auto()  # ie. lunch or dinner
+
+
+class EventType(enum.Enum):
     """Enumeration of event types."""
 
-    VISIT = enum.auto()
-    APERO = enum.auto()
-    DINNER = enum.auto()
+    COMPANY_VISIT = enum.auto()
+    CULTURAL_VISIT = enum.auto()
+    DEGUSTATION = enum.auto()
     NETWORKING = enum.auto()
+    MEAL_ONLY = enum.auto()
+    OTHER = enum.auto()

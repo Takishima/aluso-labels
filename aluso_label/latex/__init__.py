@@ -16,13 +16,13 @@
 
 """LaTeX utilities."""
 
-from ..event import EventType
+from ..event import EventFood, EventType
 from ..people import Person
 from .label_geometry import LABEL_GEOMETRIES, Label, LabelProperties
 from .latex_document import LatexDocument
 
 
-def generate_latex_document(label_type: Label, event_type: EventType, people: list[Person]):
+def generate_latex_document(label_type: Label, event_type: EventType, event_food: EventFood, people: list[Person]):
     """Generate a LaTeX document."""
-    document = LatexDocument(label_type, event_type)
+    document = LatexDocument(label_type, event_type, event_food)
     return document.generate(people)

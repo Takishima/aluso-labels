@@ -17,7 +17,7 @@
 
 import textwrap
 
-from ..event import EventType
+from ..event import EventFood, EventType
 from ..people import EventParticipation, Person
 from .label_geometry import LABEL_GEOMETRIES, Label
 
@@ -91,15 +91,17 @@ class LatexDocument:
     ICON_MEMBER = ''
     ICON_VISIT = ''
 
-    def __init__(self, label: Label, event_type: EventType):
+    def __init__(self, label: Label, event_type: EventType, event_food: EventFood):
         """Initialize a LaTeX document instance.
 
         Args:
             label (Label): Type of label to generate
             event_type (EventType): Type of event
+            event_food (EventFood): Type of food provided (if any)
         """
         self._label_type = label
         self._event_type = event_type
+        self._event_food = event_food
 
         self._generate_header()
 
@@ -133,6 +135,16 @@ class LatexDocument:
         self._generate_header()
 
     @property
+    def event_food(self) -> EventFood:
+        """Getter for the event food."""
+        return self._event_food
+
+    @event_food.setter
+    def event_food(self, new_food: EventFood):
+        self._event_food = new_food
+        self._generate_header()
+
+    @property
     def label_type(self) -> Label:
         """Getter for the label type."""
         return self._label_type
@@ -145,11 +157,12 @@ class LatexDocument:
     def _generate_header(self):
         """Generate LaTeX header."""
         visit_icon = r'\emptyIcon'
+        post_visit_icon = r'\emptyIcon'
 
         post_visit_icon = r''
-        if EventType.APERO in self._event_type:
+        if self._event_food == EventFood.APERO:
             post_visit_icon = LatexDocument.ICON_APERO
-        if EventType.DINNER in self._event_type:
+        elif self._event_type == EventFood.MEAL:
             post_visit_icon = LatexDocument.ICON_MEAL
 
         self._header = LatexDocument.HEADER.format(
@@ -175,10 +188,12 @@ class LatexDocument:
         '''
         )
 
-        if EventType.VISIT in self._event_type:
+        if self._event_type == EventType.MEAL_ONLY:
+            self._header += r'    #5'  # skip 'visit' icon
+        elif self._event_food != EventFood.NOTHING:
             self._header += r'    #4\ #5'
         else:
-            self._header += r'    #5'  # NB: we skip the 'visit' icon if there's no visit
+            self._header += r'    #4'  # skip 'food' icon
 
         self._header += textwrap.dedent(
             r'''
