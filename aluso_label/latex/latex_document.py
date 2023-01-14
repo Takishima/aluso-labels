@@ -60,7 +60,7 @@ def person_to_latex(person: Person, label_type: Label) -> str:
         member_icon = r'\externalIcon'
 
     if person.is_committee:
-        member_icon += r'\ \committee'
+        member_icon += r'\ \committeeIcon'
 
     if EventParticipation.VISIT in person.participation_type:
         visit_icon = r'\visitIcon'
@@ -85,7 +85,9 @@ class LatexDocument:
 
     ICON_APERO = ''
     ICON_COMMITTEE = ''
+    ICON_COMPANY_VISIT = ''
     ICON_CONTRIBUTOR = ''
+    ICON_CULTURAL_VISIT = ''
     ICON_EXTERNAL = ''
     ICON_MEAL = ''
     ICON_MEMBER = ''
@@ -157,9 +159,12 @@ class LatexDocument:
     def _generate_header(self):
         """Generate LaTeX header."""
         visit_icon = r'\emptyIcon'
-        post_visit_icon = r'\emptyIcon'
+        if self._event_type == EventType.COMPANY_VISIT:
+            visit_icon = LatexDocument.ICON_COMPANY_VISIT
+        elif self._event_type == EventType.CULTURAL_VISIT:
+            visit_icon = LatexDocument.ICON_CULTURAL_VISIT
 
-        post_visit_icon = r''
+        post_visit_icon = r'\emptyIcon'
         if self._event_food == EventFood.APERO:
             post_visit_icon = LatexDocument.ICON_APERO
         elif self._event_type == EventFood.MEAL:
@@ -207,6 +212,43 @@ class LatexDocument:
 
 # ==============================================================================
 # NB: These icons do not need to have the '{' and '}' protected
+
+LatexDocument.ICON_COMPANY_VISIT = textwrap.dedent(
+    r'''%
+      \begin{tikzpicture}[scale=0.045]
+        \foreach \y in {0,...,7}{
+           \draw (0, \y+3) -- (4, \y*1.5);
+           \draw (8, \y+3) -- (4, \y*1.5);
+         }
+         \draw (4, 0) -- (4, 12)
+         (0, 3) -- (0, 10)
+         (8, 3) -- (8, 10);
+         \draw (2, 10.25) -- (2, 11.25) -- (4, 12) -- (6, 11.25) -- (6, 10.25);
+      \end{tikzpicture}%
+    '''
+)
+
+LatexDocument.ICON_CULTURAL_VISIT = textwrap.dedent(
+    r'''%
+      \begin{tikzpicture}[scale=0.06]
+        \begin{scope}[shift={(2.5,-2)}]
+          \draw (0, 6) -- (0, 8) (5, 6) -- (5, 8);
+          \draw (0, 6) arc (180:253:3.5) % left side of mask
+                (5, 6) arc (180:106:-3.5) % right side of mask
+                (0, 8) arc (115:65:5.9);  % top side of mask
+          \draw (1, 7) -- +(1, 0) (4, 7) -- +(-1, 0); % eyes
+          \draw (1.25, 4.5) arc (310:230:-2);  % frown
+        \end{scope}
+        \draw (0, 6) -- (0, 8) (5, 6) -- (5, 8);
+        \draw (0, 6) arc (180:253:3.5) % left side of mask
+              (0, 8) arc (115:65:5.9);  % top side of mask
+        \fill[fill=white] (5, 6) arc (180:106:-3.5) -- (2, 6) -- (5, 8) -- cycle;
+        \draw (5, 6) arc (180:106:-3.5); % left side of mask
+        \draw (1, 7) -- +(1, 0) (4, 7) -- +(-1, 0); % eyes
+        \draw (1.25, 5) arc (230:310:2);  % smile
+      \end{tikzpicture}%
+    '''
+)
 
 LatexDocument.ICON_APERO = textwrap.dedent(
     r'''%
@@ -286,12 +328,6 @@ LatexDocument.HEADER = textwrap.dedent(
     %\LabelGridtrue % uncomment if you want to have the outline of the labels
 
     % ==============================================================================
-    % Annotation macros
-    \newcommand{{{{\visit}}}}{{{{\contribIcon}}}}     % may be changed to anything ;-)
-    \newcommand{{{{\postVisit}}}}{{{{\postVisitIcon}}}} % may be changed to anything ;-)
-    \newcommand{{{{\committee}}}}{{{{\committeeIcon}}}} % may be changed to anything ;-)
-
-    % ==============================================================================
     % Dimensions definition
     \makeatletter
     \newlength{{{{\logoWidth}}}}
@@ -304,7 +340,6 @@ LatexDocument.HEADER = textwrap.dedent(
     % ==============================================================================
     % Color definitions
     \definecolor{{{{epflred}}}}{{{{rgb}}}}{{{{1,0,0}}}}  % official EPFL red (web)
-    \definecolor{{{{accblue}}}}{{{{rgb}}}}{{{{0.25,0,1}}}}       % blue for accompanying people
 
     % ==============================================================================
     % Marks and icons
