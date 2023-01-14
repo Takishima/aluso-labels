@@ -167,7 +167,7 @@ class LatexDocument:
         post_visit_icon = r'\emptyIcon'
         if self._event_food == EventFood.APERO:
             post_visit_icon = LatexDocument.ICON_APERO
-        elif self._event_type == EventFood.MEAL:
+        elif self._event_food == EventFood.MEAL:
             post_visit_icon = LatexDocument.ICON_MEAL
 
         self._header = LatexDocument.HEADER.format(
@@ -224,8 +224,7 @@ LatexDocument.ICON_COMPANY_VISIT = textwrap.dedent(
          (0, 3) -- (0, 10)
          (8, 3) -- (8, 10);
          \draw (2, 10.25) -- (2, 11.25) -- (4, 12) -- (6, 11.25) -- (6, 10.25);
-      \end{tikzpicture}%
-    '''
+      \end{tikzpicture}%'''
 )
 
 LatexDocument.ICON_CULTURAL_VISIT = textwrap.dedent(
@@ -246,8 +245,7 @@ LatexDocument.ICON_CULTURAL_VISIT = textwrap.dedent(
         \draw (5, 6) arc (180:106:-3.5); % left side of mask
         \draw (1, 7) -- +(1, 0) (4, 7) -- +(-1, 0); % eyes
         \draw (1.25, 5) arc (230:310:2);  % smile
-      \end{tikzpicture}%
-    '''
+      \end{tikzpicture}%'''
 )
 
 LatexDocument.ICON_APERO = textwrap.dedent(
