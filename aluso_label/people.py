@@ -51,3 +51,18 @@ class Person:
             raise RuntimeError('Cannot have a non-member as part of the committee!')
         if not self.is_member and self.is_contributor:
             raise RuntimeError('Cannot have a contributor non-member!')
+
+    @staticmethod
+    def from_dict(args):
+        """Initialize from a dictionary."""
+        print(args)
+        person = Person(
+            '',
+            args['first_name'],
+            args['last_name'],
+            args['is_member'],
+            args['is_contributor'],
+            args['participation_type'],
+        )
+        person.is_committee = args['is_committee']
+        return person
