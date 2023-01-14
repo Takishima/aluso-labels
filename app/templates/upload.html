@@ -1,12 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
-{% if filestring %}
-<h1>Raw image:</h1>
+{% if people_data %}
+<h1>CSV data:</h1>
 <pre>
-      {{filestring}}
+      {{people_data}}
 </pre>
-
+<h1>Ticket name list:</h1>
+<pre>
+      {{ticket_list}}
+</pre>
 {% else %}
-<h1>Something went wrong</h1>
+<h1>Something went wrong somewhere</h1>
 {% endif %}
 {% endblock %}
