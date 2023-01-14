@@ -22,6 +22,7 @@ import enum
 class EventParticipation(enum.Flag):
     """Enumeration of event participation types."""
 
+    NOTHING = enum.auto()
     VISIT = enum.auto()
     POST_VISIT = enum.auto()
     APERO = POST_VISIT

@@ -19,7 +19,7 @@ import textwrap
 
 from ..event import EventType
 from ..people import EventParticipation, Person
-from .label_geometry import LABEL_GEOMETRY, Label
+from .label_geometry import LABEL_GEOMETRIES, Label
 
 # ==============================================================================
 
@@ -153,7 +153,7 @@ class LatexDocument:
             post_visit_icon = LatexDocument.ICON_MEAL
 
         self._header = LatexDocument.HEADER.format(
-            label_type=LABEL_GEOMETRY[self._label_type], visit=visit_icon, post_visit=post_visit_icon
+            label_type=LABEL_GEOMETRIES[self._label_type], visit=visit_icon, post_visit=post_visit_icon
         )
 
         self._header += textwrap.dedent(

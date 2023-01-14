@@ -18,7 +18,7 @@
 
 from ..event import EventType
 from ..people import Person
-from .label_geometry import LABEL_GEOMETRY, Label, LabelGeometry
+from .label_geometry import LABEL_GEOMETRIES, Label, LabelProperties
 from .latex_document import LatexDocument
 
 
