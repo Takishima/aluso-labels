@@ -1,20 +1,23 @@
 {% extends "layout.html" %}
-{% block head %}
-<title>Overleaf export</title>
-{% endblock %}
-
+{% block title %}Overleaf export{% endblock %}
 {% block content %}
-<div>
+<main>
     <div>
         <h1>Overleaf export</h1>
         <p>Submit the form below to compile the LaTeX code into a new Overleaf document.</p>
         <p>You can also compile LaTeX code on your own machine. However, please note that you will need to use XeLaTeX (<code>xetex</code>) instead of PDFLaTeX (<code>pdflatex</code>).</p>
     </div>
-    <div></div>
+
     <form name="OverleafForm" action="https://www.overleaf.com/docs" method="post" target="_blank">
-        <textarea name="snip" rows="30" cols="80">{{latex_code}}</textarea>
-        <input type="hidden" name="engine" value="xelatex">
-        <input type="submit" class="wl-submit" value="Open in Overleaf" />
+        <section>
+            <header>
+                <h2>LaTeX code</h2>
+                <small>Generated LaTeX code. Either compile using Overleaf or on your own machine.</small>
+            </header>
+            <textarea name="snip" rows="30" cols="80">{{latex_code}}</textarea>
+            <input type="hidden" name="engine" value="xelatex">
+            <input type="submit" class="wl-submit" value="Open in Overleaf" />
+        </section>
     </form>
-</div>
+</main>
 {% endblock %}
