@@ -17,19 +17,19 @@
 
 from flask import Flask
 
+from aluso_label.people import Person
+
 from .process import process_people_list
 from .upload import upload_file
 
 
-def create_app(test_config=None):
+def create_app():
     """Create and configure the application."""
     aluso_app = Flask(__name__, instance_relative_config=True, template_folder='templates')
     aluso_app.config.from_mapping(SECRET_KEY='dev')
+    aluso_app.config.from_prefixed_env()
 
-    if test_config is None:
-        aluso_app.config.from_pyfile('config.py', silent=True)
-    else:
-        aluso_app.config.from_mapping(test_config)
+    Person.COMMITTEE_LIST = {uid.strip() for uid in aluso_app.config.get('COMMITTEE_LIST', '').split(',')}
 
     aluso_app.add_url_rule('/', view_func=upload_file, methods=['GET', 'POST'])
     aluso_app.add_url_rule('/process', view_func=process_people_list, methods=['GET', 'POST'])

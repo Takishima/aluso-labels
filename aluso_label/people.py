@@ -40,8 +40,8 @@ class Person:
     participation_type: EventParticipation
     is_committee: bool = dataclasses.field(init=False)
 
-    # EPFL Alumni UIDs of committee members
-    COMMITTEE_LIST = {'273017', '217959', '294350', '241470', '212952', '200295'}
+    # NB: This is to be initialized via an environment variable: FLASK_COMMITTEE_LIST
+    COMMITTEE_LIST = {}
 
     def __post_init__(self, aluso_uid):
         """Post-initialization routine."""
