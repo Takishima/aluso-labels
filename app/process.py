@@ -31,6 +31,7 @@ def convert_people_list_to_html(people: dict) -> str:
 
     html = '''
         <table>
+            <thead>
             <tr>
     '''
 
@@ -39,6 +40,8 @@ def convert_people_list_to_html(people: dict) -> str:
 
     html += r'''
             </tr>
+            </thead>
+            <tbody>
     '''
 
     for person in people:
@@ -48,6 +51,7 @@ def convert_people_list_to_html(people: dict) -> str:
         html += '            </tr>\n'
 
     html += r'''
+            </tbody>
         </table>
     '''
 
@@ -69,6 +73,9 @@ def process_people_list():
         session['ticket_ids'] = ticket_ids
 
         session['people_csv_html'] = convert_people_list_to_html(session['people'])
+        table_labels = [
+            f'td:nth-of-type({idx+1}):before {{ content: "{key}"; }}' for idx, key in enumerate(session['people'][0])
+        ]
         session['ticket_names_str'] = str(ticket_names)
 
         return render_template(
@@ -76,6 +83,7 @@ def process_people_list():
             ticket_ids=ticket_ids,
             str=str,
             zip=zip,
+            table_style='\n'.join(table_labels),
             label_properties=[
                 (str(label_type), label_props.name) for label_type, label_props in LABEL_PROPERTIES.items()
             ],
