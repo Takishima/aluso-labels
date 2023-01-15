@@ -55,7 +55,6 @@ class Person:
     @staticmethod
     def from_dict(args):
         """Initialize from a dictionary."""
-        print(args)
         person = Person(
             '',
             args['first_name'],

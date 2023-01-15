@@ -13,4 +13,29 @@
 #   OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Flask application module."""
+"""Main for Flask app."""
+
+from flask import Flask
+
+from .process import process_people_list
+from .upload import upload_file
+
+
+def create_app(test_config=None):
+    """Create and configure the application."""
+    aluso_app = Flask(__name__, instance_relative_config=True, template_folder='templates')
+    aluso_app.config.from_mapping(SECRET_KEY='dev')
+
+    if test_config is None:
+        aluso_app.config.from_pyfile('config.py', silent=True)
+    else:
+        aluso_app.config.from_mapping(test_config)
+
+    aluso_app.add_url_rule('/', view_func=upload_file, methods=['GET', 'POST'])
+    aluso_app.add_url_rule('/process', view_func=process_people_list, methods=['GET', 'POST'])
+    return aluso_app
+
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run()

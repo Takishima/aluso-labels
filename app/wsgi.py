@@ -13,4 +13,18 @@
 #   OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Flask application module."""
+"""Web Server Gateway Interface module."""
+
+# Set the path
+import os
+import sys
+
+sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), "..", "..")))
+sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
+
+from app.main import create_app  # noqa: E402  # pylint: disable=wrong-import-position
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run()
