@@ -51,6 +51,7 @@ class LabelProperties(NamedTuple):
         """Generate the LaTeX code for a given label geometry."""
         return textwrap.dedent(
             rf'''
+        % Label configuration for: {self.name}
         \LabelCols={self.cols}
         \LabelRows={self.rows}
         \LeftPageMargin={self.page_margin.left}mm
