@@ -367,7 +367,7 @@ LatexDocument.HEADER = textwrap.dedent(
     \newcommand{{{{\swissFlagIcon}}}}{{{{%
       \begin{{{{tikzpicture}}}}[scale=0.0025]
       \fill[red] (0,0) rectangle (110,110);
-     '\fill[white] (43,15) rectangle (67,95);
+      \fill[white] (43,15) rectangle (67,95);
       \fill[white] (15,67) rectangle (95,43);
       \end{{{{tikzpicture}}}}}}}}
 
