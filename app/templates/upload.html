@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
-{% block body %}
-{% if people_data %}
-<h1>CSV data:</h1>
-<pre>
-      {{people_data}}
-</pre>
-<h1>Ticket name list:</h1>
-<pre>
-      {{ticket_list}}
-</pre>
-{% else %}
-<h1>Something went wrong somewhere</h1>
-{% endif %}
+{% block title %}Parameters for LaTeX generation{% endblock %}
+{% block content %}
+<h1 class="title">Upload an EPFL Alumni CSV file</h1>
+
+<form method=post enctype=multipart/form-data>
+    <fieldset>
+        <legend>CSV file with participants</legend>
+        <input type=file name=file>
+    </fieldset>
+    <input type=submit value=Upload>
+</form>
+
 {% endblock %}

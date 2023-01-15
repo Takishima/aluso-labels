@@ -34,7 +34,6 @@ def create_app(test_config=None):
 
     app.add_url_rule('/', view_func=upload_file, methods=['GET', 'POST'])
     app.add_url_rule('/process', view_func=process_people_list, methods=['GET', 'POST'])
-
     return app
 
 

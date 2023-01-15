@@ -38,8 +38,11 @@ def upload_file():
             return _error
 
         filename = Path(file.filename)
-        if not file or filename.suffix not in ('.CSV', '.csv'):
-            flash('Uh-oh! Unsupported file extension and/or something unexpected happened!')
+        if not file:
+            flash('Uh-oh! Invalid file descriptor!')
+            return _error
+        if filename.suffix not in ('.CSV', '.csv'):
+            flash('Uh-oh! Unsupported file extension. I only accept CSV (.csv or .CSV) files')
             return _error
 
         data_fields = {
@@ -84,12 +87,4 @@ def upload_file():
         session['ticket_names'] = ticket_names
         return redirect(url_for('process_people_list'))
 
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template('upload.html')

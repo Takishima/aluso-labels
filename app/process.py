@@ -18,7 +18,7 @@
 import pprint
 import re
 
-from flask import render_template, request, session
+from flask import redirect, render_template, request, session, url_for
 
 from aluso_label.event import EventFood, EventType
 from aluso_label.latex import LABEL_GEOMETRIES, Label, generate_latex_document
@@ -27,7 +27,10 @@ from aluso_label.people import EventParticipation, Person
 
 def process_people_list():
     """Process a list of participants."""
-    ticket_names = session['ticket_names']
+    try:
+        ticket_names = session['ticket_names']
+    except KeyError:
+        return redirect(url_for('upload_file'))
 
     if request.method == 'GET':
         ticket_ids = []
@@ -72,4 +75,9 @@ def process_people_list():
         people.append(Person.from_dict(person))
 
     latex_code = generate_latex_document(label_type, event_type, event_food, people)
+
+    # Clear data from session if successful
+    del session['people']
+    del session['ticket_names']
+
     return render_template('overleaf.html', latex_code=latex_code)
