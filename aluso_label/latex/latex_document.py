@@ -236,7 +236,7 @@ LatexDocument.ICON_APERO = textwrap.dedent(
 
 LatexDocument.ICON_COMPANY_VISIT = textwrap.dedent(
     r'''%
-      \begin{tikzpicture}[scale=0.045]
+      \begin{tikzpicture}[scale=0.044]
         \foreach \y in {0,...,7}{
            \draw (0, \y+3) -- (4, \y*1.5);
            \draw (8, \y+3) -- (4, \y*1.5);
