@@ -21,7 +21,7 @@ import re
 from flask import redirect, render_template, request, session, url_for
 
 from aluso_label.event import EventFood, EventType
-from aluso_label.latex import LABEL_GEOMETRIES, Label, generate_latex_document
+from aluso_label.latex import LABEL_PROPERTIES, Label, generate_latex_document
 from aluso_label.people import EventParticipation, Person
 
 
@@ -47,8 +47,8 @@ def process_people_list():
             ticket_ids=ticket_ids,
             str=str,
             zip=zip,
-            label_geometries=[
-                (str(label_type), label_props.name) for label_type, label_props in LABEL_GEOMETRIES.items()
+            label_properties=[
+                (str(label_type), label_props.name) for label_type, label_props in LABEL_PROPERTIES.items()
             ],
         )
 

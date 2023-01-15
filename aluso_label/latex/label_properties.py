@@ -84,7 +84,7 @@ class Label(enum.Enum):
     AVERY_70X423 = enum.auto()
 
 
-LABEL_GEOMETRIES = {
+LABEL_PROPERTIES = {
     Label.AVERY_646X338: LabelProperties(
         '64.6x33.8mm (A3658/A6172)', 64.6, 33.8, 3, 8, Margin(8.1, 8.1, 13.3, 13.3), 0, 0
     ),
