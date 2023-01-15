@@ -15,7 +15,6 @@
 
 """LaTeX generation utilities."""
 
-import pprint
 import re
 
 from flask import redirect, render_template, request, session, url_for
@@ -23,6 +22,36 @@ from flask import redirect, render_template, request, session, url_for
 from aluso_label.event import EventFood, EventType
 from aluso_label.latex import LABEL_PROPERTIES, Label, generate_latex_document
 from aluso_label.people import EventParticipation, Person
+
+
+def convert_people_list_to_html(people: dict) -> str:
+    """Convert a list of people into an HTML table."""
+    if not people:
+        return ''
+
+    html = '''
+        <table>
+            <tr>
+    '''
+
+    for key in people[0]:
+        html += f'                    <th>{key}</th>\n'
+
+    html += r'''
+            </tr>
+    '''
+
+    for person in people:
+        html += '            <tr>\n'
+        for data in person:
+            html += f'                    <td><pre>{person[data]}</pre></td>\n'
+        html += '            </tr>\n'
+
+    html += r'''
+        </table>
+    '''
+
+    return html
 
 
 def process_people_list():
@@ -39,7 +68,7 @@ def process_people_list():
 
         session['ticket_ids'] = ticket_ids
 
-        session['people_str'] = pprint.pformat(session['people'], indent=4)
+        session['people_csv_html'] = convert_people_list_to_html(session['people'])
         session['ticket_names_str'] = str(ticket_names)
 
         return render_template(

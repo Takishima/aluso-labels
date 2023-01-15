@@ -1,5 +1,23 @@
 {% extends "layout.html" %}
-{% block title %}Parameters for LaTeX generation{% endblock %}
+{% block head %}
+<title>Parameters for LaTeX generation</title>
+<style>
+ table {
+     font-family: arial, sans-serif;
+     border-collapse: collapse;
+     width: 100%;
+ }
+
+ td, th {
+     border: 1px solid #dddddd;
+     text-align: left;
+     padding: 8px;
+ }
+
+ tr:nth-child(even) {
+     background-color: #dddddd;
+ }</style>
+{% endblock %}
 {% block content %}
 <main>
     <h1 class="title">LaTeX generation settings</h1>
@@ -8,7 +26,7 @@
         <section>
             <header>
                 <h2>Tickets</h2>
-                <small>Ticket related settings</small>
+                <small>These are the ticket types I have found within the CSV file. Choose for each one if it gives the participant access to the various event features.</small>
             </header>
 
             {%for ticket, uid in zip(session['ticket_names'], session['ticket_ids'])%}
@@ -166,9 +184,18 @@
             </div>
         </section>
     </form>
+
+    <section>
+        <header>
+        <h1>Processed information</h1>
+        <small>Check if the data from the CSV file was parsed correctly.</small>
+        </header>
+
+        <div>
+            <h3>Participants information</h3>
+
+            {{session['people_csv_html']|safe}}
+        </div>
+    </section>
 </main>
-<h1>CSV data</h1>
-<pre>
-      {{session['people_csv_html']}}
-</pre>
 {% endblock %}
