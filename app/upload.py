@@ -38,7 +38,6 @@ def upload_file():
     if form.validate_on_submit():
         data_fields = {
             'aluso_uid': ['ID user AF'],
-            'transation_uid': ['ID transaction/autorisation', 'Transaction/Authorization ID'],
             'first_name': ['Prénom', 'First name'],
             'last_name': ['Nom de famille', 'Family Name'],
             'contribution_status': ['Cotisant', 'Contributor'],
