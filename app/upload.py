@@ -55,8 +55,21 @@ def upload_file():
                         current_data[field] = row[option].strip()
                         break
                 else:
+                    options = [f'"{option}"' for option in options]
                     form.form_errors = [f'Unable to parse CSV data for field {field} (tried {", ".join(options)})']
-                    return render_template('upload.html', form=form)
+                    errors = [
+                        ('p', form.form_errors[0]),
+                        ('p', ' '),
+                        (
+                            'p',
+                            (
+                                'Are you sure you that any of the columns listed '
+                                'below were selected when exporting the CSV file?'
+                            ),
+                        ),
+                        ('li', options),
+                    ]
+                    return render_template('upload.html', form=form, errors=errors)
 
             if not current_data['ticket_name']:
                 # There are sometimes some double entries with identical data except empty ticket name

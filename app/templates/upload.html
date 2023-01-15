@@ -14,11 +14,27 @@
             <div class="form-group col-md-6">
                 {{ form.csrf_token() }}
                 {{ form.csv_file }}
+                {% if errors %}
+                <small class="form-text text-muted ">
+                    {% for tag, error in errors %}
+                    {% if tag == 'p' %}
+                    <p>{{error}}</p>
+                    {% elif tag == 'li' %}
+                    <ul>
+                        {% for item in error %}
+                        <li>{{item}}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endfor %}
+                </small>
+                {% else %}
                 {% for field, errors in form.errors.items() %}
                 <small class="form-text text-muted ">
                     {{ ', '.join(errors) }}
                 </small>
                 {% endfor %}
+                {% endif %}
             </div>
         </section>
         <section>
