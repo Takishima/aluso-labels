@@ -31,7 +31,7 @@ class EventType(enum.Enum):
 
     COMPANY_VISIT = enum.auto()
     CULTURAL_VISIT = enum.auto()
-    DEGUSTATION = enum.auto()
+    TASTING = enum.auto()
     NETWORKING = enum.auto()
     MEAL_ONLY = enum.auto()
     OTHER = enum.auto()

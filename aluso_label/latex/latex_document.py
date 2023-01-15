@@ -92,6 +92,7 @@ class LatexDocument:
     ICON_MEAL = ''
     ICON_MEMBER = ''
     ICON_NETWORKING = ''
+    ICON_TASTING = ''
     ICON_VISIT = ''
 
     def __init__(self, label: Label, event_type: EventType, event_food: EventFood):
@@ -168,6 +169,8 @@ class LatexDocument:
             visit_icon = LatexDocument.ICON_COMPANY_VISIT
         elif self._event_type == EventType.CULTURAL_VISIT:
             visit_icon = LatexDocument.ICON_CULTURAL_VISIT
+        elif self._event_type == EventType.TASTING:
+            visit_icon = LatexDocument.ICON_TASTING
         elif self._event_type == EventType.NETWORKING:
             visit_icon = LatexDocument.ICON_NETWORKING
 
@@ -220,6 +223,17 @@ class LatexDocument:
 # ==============================================================================
 # NB: These icons do not need to have the '{' and '}' protected
 
+LatexDocument.ICON_APERO = textwrap.dedent(
+    r'''%
+      \begin{tikzpicture}[scale=0.02]
+        \draw[] (7.5,10) circle (4);
+        \draw[fill=white,] (0,0) -- ++(-7.5,10) -- ++(15,0) -- cycle;
+        %               ((12.5-r)*0.6, (12.5-r)*0.8)
+        \draw[] (0,0) -- ++(-5.1,6.8) -- ++(10.2,0) -- cycle
+        (0,0) -- ++(0,-8.5) -- ++(-4,0) -- ++(8,0);
+      \end{tikzpicture}%'''
+)
+
 LatexDocument.ICON_COMPANY_VISIT = textwrap.dedent(
     r'''%
       \begin{tikzpicture}[scale=0.045]
@@ -245,24 +259,13 @@ LatexDocument.ICON_CULTURAL_VISIT = textwrap.dedent(
           \draw (1, 7) -- +(1, 0) (4, 7) -- +(-1, 0); % eyes
           \draw (1.25, 4.5) arc (310:230:-2);  % frown
         \end{scope}
+        \fill[fill=white] (5, 6) arc (180:106:-3.5) -- (2, 6) -- (5, 8) -- cycle;
         \draw (0, 6) -- (0, 8) (5, 6) -- (5, 8);
         \draw (0, 6) arc (180:253:3.5) % left side of mask
               (0, 8) arc (115:65:5.9);  % top side of mask
-        \fill[fill=white] (5, 6) arc (180:106:-3.5) -- (2, 6) -- (5, 8) -- cycle;
         \draw (5, 6) arc (180:106:-3.5); % left side of mask
         \draw (1, 7) -- +(1, 0) (4, 7) -- +(-1, 0); % eyes
         \draw (1.25, 5) arc (230:310:2);  % smile
-      \end{tikzpicture}%'''
-)
-
-LatexDocument.ICON_APERO = textwrap.dedent(
-    r'''%
-      \begin{tikzpicture}[scale=0.02]
-        \draw[] (7.5,10) circle (4);
-        \draw[fill=white,] (0,0) -- ++(-7.5,10) -- ++(15,0) -- cycle;
-        %               ((12.5-r)*0.6, (12.5-r)*0.8)
-        \draw[] (0,0) -- ++(-5.1,6.8) -- ++(10.2,0) -- cycle
-        (0,0) -- ++(0,-8.5) -- ++(-4,0) -- ++(8,0);
       \end{tikzpicture}%'''
 )
 
@@ -288,6 +291,20 @@ LatexDocument.ICON_NETWORKING = textwrap.dedent(
         \draw (6.5, 12.5) ++(7.071,-7.071) -- ++(2, -2) ++(1.4142, -1.4142)  circle (2);
         \draw (6.5, 12.5) ++(-7.071,7.071) -- ++(-2, 2) ++(-1.4142, 1.4142)  circle (2);
         \draw (6.5, 12.5) ++(-7.071,-7.071) -- ++(-2, -2) ++(-1.4142, -1.4142)  circle (2);
+      \end{tikzpicture}%'''
+)
+
+LatexDocument.ICON_TASTING = textwrap.dedent(
+    r'''%
+      \begin{tikzpicture}[scale=0.065]
+        \draw[] (3, 3) circle (3);
+        \draw (1.5, 4) arc (160:20:0.5);
+        \draw (3.5, 4) arc (160:20:0.5);
+
+        \draw (1.75, 1.75) arc (230:310:2) to[out=50, in=0] (4.15, 2.55) to[out=180, in=70]
+              (3.3, 1.8) to[out=250, in=50] (3, 1.3);
+        \draw (3.2, 1.3) arc (290:350:1.1);
+        % \draw (3.2, 1.3) arc (280:350:1);
       \end{tikzpicture}%'''
 )
 
