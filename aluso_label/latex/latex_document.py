@@ -91,6 +91,7 @@ class LatexDocument:
     ICON_EXTERNAL = ''
     ICON_MEAL = ''
     ICON_MEMBER = ''
+    ICON_NETWORKING = ''
     ICON_VISIT = ''
 
     def __init__(self, label: Label, event_type: EventType, event_food: EventFood):
@@ -163,6 +164,8 @@ class LatexDocument:
             visit_icon = LatexDocument.ICON_COMPANY_VISIT
         elif self._event_type == EventType.CULTURAL_VISIT:
             visit_icon = LatexDocument.ICON_CULTURAL_VISIT
+        elif self._event_type == EventType.NETWORKING:
+            visit_icon = LatexDocument.ICON_NETWORKING
 
         post_visit_icon = r'\emptyIcon'
         if self._event_food == EventFood.APERO:
@@ -265,6 +268,22 @@ LatexDocument.ICON_MEAL = textwrap.dedent(
         \draw (0,-35) -- (0,0) -- ++(56,0) -- ++(0,-35) arc (0:-90:24) -- ++(0, -20) arc (-180:-90:15) -- ++(5,0);
         \draw (0,-35) arc (180:270:24) -- ++(0, -20) arc (0:-90:15) -- ++(-5,0);
         \draw (56,0) ++ (12,0) -- +(0,-26) ++(12,0) -- +(0,-26) ++(12,0) -- +(0,-30) arc (0:-90:12) -- +(0,-52);
+      \end{tikzpicture}%'''
+)
+
+LatexDocument.ICON_NETWORKING = textwrap.dedent(
+    r'''%
+      \begin{tikzpicture}[scale=0.0125]
+        \draw (0, 5) arc (160:20:7) ++(-6.5, 8.6) circle (4);
+        \draw (6.5, 12.5) circle (10);
+        \draw (6.5, 12.5) ++(0, 10) -- ++(0, 4) ++(0, 2)  circle (2);
+        \draw (6.5, 12.5) ++(0, -10) -- ++(0, -4) ++(0, -2)  circle (2);
+        \draw (6.5, 12.5) ++(10, 0) -- ++(4, 0) ++(2, 0)  circle (2);
+        \draw (6.5, 12.5) ++(-10, 0) -- ++(-4, 0) ++(-2, 0)  circle (2);
+        \draw (6.5, 12.5) ++(7.071,7.071) -- ++(2, 2) ++(1.4142, 1.4142)  circle (2);
+        \draw (6.5, 12.5) ++(7.071,-7.071) -- ++(2, -2) ++(1.4142, -1.4142)  circle (2);
+        \draw (6.5, 12.5) ++(-7.071,7.071) -- ++(-2, 2) ++(-1.4142, 1.4142)  circle (2);
+        \draw (6.5, 12.5) ++(-7.071,-7.071) -- ++(-2, -2) ++(-1.4142, -1.4142)  circle (2);
       \end{tikzpicture}%'''
 )
 
