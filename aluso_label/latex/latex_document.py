@@ -124,6 +124,10 @@ class LatexDocument:
             text
             + r'''  \end{labels}
 \end{document}
+
+% Local Variables:
+% TeX-engine: xetex
+% End:
 '''
         )
 
