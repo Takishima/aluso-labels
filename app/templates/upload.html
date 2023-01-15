@@ -4,17 +4,27 @@
 <main>
     <h1 class="title">Upload an EPFL Alumni CSV file</h1>
 
-    <form method=post enctype=multipart/form-data>
+    <form method="post" enctype=multipart/form-data action="">
         <section>
             <header>
                 <h2>CSV file</h2>
                 <small>File exported from the EPFL Alumni event administration page.</small>
             </header>
 
-            <input type="file" name="file" id="file">
+            <div class="form-group col-md-6">
+                {{ form.csrf_token() }}
+                {{ form.csv_file }}
+                {% for field, errors in form.errors.items() %}
+                <small class="form-text text-muted ">
+                    {{ ', '.join(errors) }}
+                </small>
+                {% endfor %}
+            </div>
         </section>
         <section>
-            <input type="submit" value="Upload file">
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary")}}
+            </div>
         </section>
     </form>
 </main>

@@ -121,4 +121,4 @@ repos:
         name: pylint-strict
         # exclude: (test_.*\.py)$
         args: [--score=n, --load-plugins=pylint_secure_coding_standard]
-        additional_dependencies: [flask, pylint-secure-coding-standard]
+        additional_dependencies: [flask, flask-wtf, pylint-secure-coding-standard]

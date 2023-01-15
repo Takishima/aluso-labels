@@ -16,35 +16,26 @@
 """CSV file upload utilities."""
 
 import csv
-from pathlib import Path
 
-from flask import flash, redirect, render_template, request, session, url_for
+from flask import redirect, render_template, session, url_for
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileRequired
+from wtforms import FileField, SubmitField
 
 from aluso_label.people import Person
 
 
+class CSVFileUploadForm(FlaskForm):
+    """CSV file input form."""
+
+    csv_file = FileField(label='CSV File', validators=[FileRequired(), FileAllowed(['csv', 'CSV'])])
+    submit = SubmitField(label='Upload')
+
+
 def upload_file():
     """Convert an EPFL Alumni CSV file to a list of participants."""
-    _error = render_template('error.html'), {'Refresh': f'5; {request.url}'}
-
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file in request!')
-            return _error
-
-        file = request.files['file']
-        if file.filename == '':
-            flash('No selected file!', 'error')
-            return _error
-
-        filename = Path(file.filename)
-        if not file:
-            flash('Uh-oh! Invalid file descriptor!')
-            return _error
-        if filename.suffix not in ('.CSV', '.csv'):
-            flash('Uh-oh! Unsupported file extension. I only accept CSV (.csv or .CSV) files')
-            return _error
-
+    form = CSVFileUploadForm()
+    if form.validate_on_submit():
         data_fields = {
             'aluso_uid': ['ID user AF'],
             'transation_uid': ['ID transaction/autorisation', 'Transaction/Authorization ID'],
@@ -56,7 +47,7 @@ def upload_file():
 
         ticket_names = set()
         people = []
-        for row in csv.DictReader(file.read().decode().splitlines(), skipinitialspace=True):
+        for row in csv.DictReader(form.csv_file.data.read().decode().splitlines(), skipinitialspace=True):
             current_data = {}
             for field, options in data_fields.items():
                 for option in options:
@@ -64,7 +55,9 @@ def upload_file():
                         current_data[field] = row[option].strip()
                         break
                 else:
-                    raise RuntimeError(f'Unable to parse CSV data for field {field} (tried {options})')
+                    form.form_errors = [f'Unable to parse CSV data for field {field} (tried {", ".join(options)})']
+                    return render_template('upload.html', form=form)
+
             if not current_data['ticket_name']:
                 # There are sometimes some double entries with identical data except empty ticket name
                 continue
@@ -87,4 +80,5 @@ def upload_file():
         session['ticket_names'] = ticket_names
         return redirect(url_for('process_people_list'))
 
-    return render_template('upload.html')
+    # Something wrong happened -> resubmit current page
+    return render_template('upload.html', form=form)
