@@ -1,14 +1,21 @@
 {% extends "layout.html" %}
 {% block title %}Parameters for LaTeX generation{% endblock %}
 {% block content %}
-<h1 class="title">Upload an EPFL Alumni CSV file</h1>
+<main>
+    <h1 class="title">Upload an EPFL Alumni CSV file</h1>
 
-<form method=post enctype=multipart/form-data>
-    <fieldset>
-        <legend>CSV file with participants</legend>
-        <input type=file name=file>
-    </fieldset>
-    <input type=submit value=Upload>
-</form>
+    <form method=post enctype=multipart/form-data>
+        <section>
+            <header>
+                <h2>CSV file</h2>
+                <small>File exported from the EPFL Alumni event administration page.</small>
+            </header>
 
+            <input type="file" name="file" id="file">
+        </section>
+        <section>
+            <input type="submit" value="Upload file">
+        </section>
+    </form>
+</main>
 {% endblock %}
