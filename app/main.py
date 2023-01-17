@@ -15,12 +15,22 @@
 
 """Main for Flask app."""
 
+import os
+
 from flask import Flask
 
 from aluso_label.people import Person
 
 from .process import process_people_list
 from .upload import upload_file
+
+
+def add_version_info_to_template():
+    """Flask context processor to automatically add some variables to the base template."""
+    version = os.environ.get('VERCEL_GIT_COMMIT_SHA', 'N/A')
+    if not version:
+        version = 'N/A'
+    return {'version': version}
 
 
 def create_app():
@@ -33,6 +43,7 @@ def create_app():
 
     aluso_app.add_url_rule('/', view_func=upload_file, methods=['GET', 'POST'])
     aluso_app.add_url_rule('/process', view_func=process_people_list, methods=['GET', 'POST'])
+    aluso_app.context_processor(add_version_info_to_template)
     return aluso_app
 
 
