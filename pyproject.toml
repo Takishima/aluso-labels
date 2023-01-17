@@ -81,7 +81,7 @@ skip-string-normalization = true
     sys.path.append(os.path.dirname(list(find_default_config_files())[0]))'''
 
     [tool.pylint.basic]
-    good-names = []
+    good-names = ['COMMITTEE_LIST']
 
     [tool.pylint.format]
     max-line-length = 120

@@ -17,6 +17,7 @@
 
 import dataclasses
 import enum
+from typing import ClassVar
 
 
 class EventParticipation(enum.Flag):
@@ -41,7 +42,7 @@ class Person:
     is_committee: bool = dataclasses.field(init=False)
 
     # NB: This is to be initialized via an environment variable: FLASK_COMMITTEE_LIST
-    COMMITTEE_LIST = {}
+    COMMITTEE_LIST: ClassVar[dict[str, str]] = {}
 
     def __post_init__(self, aluso_uid):
         """Post-initialization routine."""
