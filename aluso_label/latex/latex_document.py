@@ -49,8 +49,8 @@ def person_to_latex(person: Person, label_type: Label) -> str:
     if label_type in (Label.AVERY_64X36, Label.AVERY_646X338):
         ref_length = 12
 
-    first_name = apply_stretch_factor(person.first_name, ref_length)
-    last_name = apply_stretch_factor(person.last_name, ref_length)
+    first_name = apply_stretch_factor(person.first_name.replace(' ', r'\,'), ref_length)
+    last_name = apply_stretch_factor(person.last_name.replace(' ', r'\,'), ref_length)
 
     if person.is_contributor:
         member_icon = r'\contribIcon'
