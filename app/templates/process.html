@@ -9,19 +9,25 @@
  }
 
  td, th {
-     border: 1px solid #dddddd;
+     border: 1px solid #aaaaaa;
      text-align: left;
      padding: 8px;
  }
 
  tr:nth-child(even) {
-     background-color: #dddddd;
+     background-color: #aaaaaa;
  }
  @media
  only screen and (max-width: 800px) {
      /* Force table to not be like tables anymore */
      table, thead, tbody, th, td, tr {
          display: block;
+     }
+
+     tr {
+         max-width: 90vw;
+         overflow: auto;
+         white-space: nowrap;
      }
 
      /* Hide table headers (but not display: none;, for accessibility) */
