@@ -14,10 +14,27 @@
                 <h2>LaTeX code</h2>
                 <small>Generated LaTeX code. Either compile using Overleaf or on your own machine.</small>
             </header>
-            <textarea name="snip" rows="30" cols="80">{{latex_code}}</textarea>
+            <textarea name="snip" id="latex-code" rows="30" cols="80">{{latex_code}}</textarea>
             <input type="hidden" name="engine" value="xelatex">
             <input type="submit" class="wl-submit" value="Open in Overleaf" />
         </section>
     </form>
+
+    <div>
+        <button onclick="copy_to_clipboard()">Copy LaTeX</button>
+    </div>
+
+    <script>
+        function copy_to_clipboard() {
+          var copyText = document.getElementById("latex-code");
+
+          copyText.select();
+          copyText.setSelectionRange(0, 99999); // For mobile devices
+
+          navigator.clipboard.writeText(copyText.value);
+
+          alert("Copied the text: " + copyText.value);
+        }
+    </script>
 </main>
 {% endblock %}
