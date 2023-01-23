@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+-   Shorten confirmation message when copying LaTeX code to clipboard on final page
 -   Fix some pylint warnings
 
 ### Repository
