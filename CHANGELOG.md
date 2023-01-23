@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2023-01-23
 
+### Added
+
+-   Try to automatically guess whether tickets include the meal or not and if the event has an apéro or a meal
+
 ### Changed
 
 -   Fix some pylint warnings

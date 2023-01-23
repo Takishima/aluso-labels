@@ -58,43 +58,53 @@ def convert_people_list_to_html(people: dict) -> str:
     return html
 
 
-def process_people_list():
-    """Process a list of participants."""
-    try:
-        ticket_names = session['ticket_names']
-    except KeyError:
-        return redirect(url_for('upload_file'))
+def process_people_list_get(ticket_names, ticket_ids):
+    """Process GET requests for the list of participants."""
+    session['people_csv_html'] = convert_people_list_to_html(session['people'])
+    table_labels = [
+        f'td:nth-of-type({idx+1}):before {{ content: "{key}"; }}' for idx, key in enumerate(session['people'][0])
+    ]
+    session['ticket_names_str'] = str(ticket_names)
 
-    if request.method == 'GET':
-        ticket_ids = []
-        for ticket in ticket_names:
-            ticket_ids.append(re.sub(r'[ -/\{}]', '_', ticket.lower()))
+    ticket_checkboxes = {'visit': ['checked'] * len(ticket_ids), 'postvisit': [''] * len(ticket_ids)}
 
-        session['ticket_ids'] = ticket_ids
+    meal_option = EventFood.NOTHING
 
-        session['people_csv_html'] = convert_people_list_to_html(session['people'])
-        table_labels = [
-            f'td:nth-of-type({idx+1}):before {{ content: "{key}"; }}' for idx, key in enumerate(session['people'][0])
-        ]
-        session['ticket_names_str'] = str(ticket_names)
+    for idx, (name, _) in enumerate(zip(ticket_names, ticket_checkboxes['postvisit'])):
+        if re.search(r'avec\s+(repas|souper|d[iî]ner)', name, re.IGNORECASE):
+            meal_option = EventFood.MEAL
+            ticket_checkboxes['postvisit'][idx] = 'checked'
+        elif re.search(r'avec\s+ap[eé]ro', name, re.IGNORECASE):
+            meal_option = EventFood.APERO
+            ticket_checkboxes['postvisit'][idx] = 'checked'
+        elif re.search(r'visite\s+(seule|uniquement)', name, re.IGNORECASE):
+            pass
 
-        return render_template(
-            'process.html',
-            ticket_ids=ticket_ids,
-            str=str,
-            zip=zip,
-            table_style='\n'.join(table_labels),
-            label_properties=[
-                (str(label_type), label_props.name) for label_type, label_props in LABEL_PROPERTIES.items()
-            ],
-        )
+    meal_radio_button = {'no_meal': '', 'apero': '', 'meal': ''}
+    if meal_option == EventFood.MEAL:
+        meal_radio_button['meal'] = 'checked'
+    elif meal_option == EventFood.APERO:
+        meal_radio_button['apero'] = 'checked'
+    else:
+        meal_radio_button['no_meal'] = 'checked'
 
-    ticket_ids = session['ticket_ids']
+    return render_template(
+        'process.html',
+        ticket_ids=ticket_ids,
+        ticket_visit_checked=ticket_checkboxes['visit'],
+        ticket_postvisit_checked=ticket_checkboxes['postvisit'],
+        no_meal_checked=meal_radio_button['no_meal'],
+        apero_checked=meal_radio_button['apero'],
+        meal_checked=meal_radio_button['meal'],
+        str=str,
+        zip=zip,
+        table_style='\n'.join(table_labels),
+        label_properties=[(str(label_type), label_props.name) for label_type, label_props in LABEL_PROPERTIES.items()],
+    )
 
-    label_type = Label[request.form['label_type'].replace(f'{Label.__name__}.', '')]
-    event_type = EventType[request.form['event_type_visit']]
-    event_food = EventFood[request.form['event_type_post_visit']]
 
+def process_people_list_post(ticket_names, ticket_ids):
+    """Process POST requests for the list of participants."""
     ticket_data = {}
     for ticket, uid in zip(ticket_names, ticket_ids):
         participation_type = EventParticipation.NOTHING
@@ -111,10 +121,29 @@ def process_people_list():
         person['participation_type'] = ticket_data[person['participation_type']]
         people.append(Person.from_dict(person))
 
-    latex_code = generate_latex_document(label_type, event_type, event_food, people)
+    latex_code = generate_latex_document(
+        Label[request.form['label_type'].replace(f'{Label.__name__}.', '')],
+        EventType[request.form['event_type_visit']],
+        EventFood[request.form['event_type_post_visit']],
+        people,
+    )
 
     # Clear data from session if successful
     del session['people']
     del session['ticket_names']
 
     return render_template('overleaf.html', latex_code=latex_code)
+
+
+def process_people_list():
+    """Process a list of participants."""
+    try:
+        ticket_names = session['ticket_names']
+    except KeyError:
+        return redirect(url_for('upload_file'))
+
+    ticket_ids = [re.sub(r'[ -/\{}]', '_', name.lower()) for name in ticket_names]
+
+    if request.method == 'GET':
+        return process_people_list_get(ticket_names, ticket_ids)
+    return process_people_list_post(ticket_names, ticket_ids)

@@ -72,7 +72,7 @@
                 <small>These are the ticket types I have found within the CSV file. Choose for each one if it gives the participant access to the various event features.</small>
             </header>
 
-            {%for ticket, uid in zip(session['ticket_names'], session['ticket_ids'])%}
+            {%for ticket, uid, visit_checked, postvisit_checked in zip(session['ticket_names'], ticket_ids, ticket_visit_checked, ticket_postvisit_checked)%}
             <section>
                 <header>
                     <h3>{{ticket}}</h3>
@@ -81,7 +81,7 @@
                     <div class="fieldset-item">
                         <input
                             type="checkbox"
-                            checked
+                            {{ visit_checked }}
                             value="1"
                             id="{{uid}}_visit"
                             name="{{uid}}_visit"
@@ -97,7 +97,7 @@
                     <div class="fieldset-item">
                         <input
                             type="checkbox"
-                            checked
+                            {{ postvisit_checked }}
                             value="1"
                             id="{{uid}}_post_visit"
                             name="{{uid}}_post_visit"
@@ -178,23 +178,23 @@
                 </header>
                 <fieldset>
                     <div class="fieldset-item">
-                        <input type="radio" name="event_type_post_visit" id="event_food_none" value="NOTHING" checked/>
+                        <input type="radio" name="event_type_post_visit" id="event_food_none" value="NOTHING" {{ no_meal_checked }}/>
                         <label for="event_food_none">
                             <h4>No meal/apéro</h4>
                             <small>The event will not have a meal or apéro</small>
                         </label>
                     </div>
                     <div class="fieldset-item">
-                        <input type="radio" name="event_type_post_visit" id="event_food_apero" value="APERO" />
+                        <input type="radio" name="event_type_post_visit" id="event_food_apero" value="APERO" {{ apero_checked }}/>
                         <label for="event_food_apero">
                             <h4>Apéro</h4>
                             <small>The event will have an apéro</small>
                         </label>
                     </div>
                     <div class="fieldset-item">
-                        <input type="radio" name="event_type_post_visit" id="event_food_meal" value="MEAL" />
+                        <input type="radio" name="event_type_post_visit" id="event_food_meal" value="MEAL" {{ meal_checked }}/>
                         <label for="event_food_dinner">
-                            <h4>Dinner</h4>
+                            <h4>Lunch/dinner</h4>
                             <small>The event will have a meal (lunch, dinner, etc.)</small>
                         </label>
                     </div>
