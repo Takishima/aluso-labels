@@ -1,16 +1,16 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "app/index.py",
-            "use": "@vercel/python"
-        }
-    ],
-    "regions": ["fra1"],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "app/index.py"
-        }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "app/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "regions": ["fra1"],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app/index.py"
+    }
+  ]
 }
