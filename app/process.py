@@ -29,26 +29,26 @@ def convert_people_list_to_html(people: dict) -> str:
     if not people:
         return ''
 
-    html = '''
+    html = (
+        '''
         <table>
             <thead>
             <tr>
     '''
-
-    for key in people[0]:
-        html += f'                    <th>{key}</th>\n'
-
-    html += r'''
+        + '\n                    '.join(f'<th>{key}</th>' for key in people[0])
+        + r'''
             </tr>
             </thead>
             <tbody>
     '''
+    )
 
     for person in people:
-        html += '            <tr>\n'
-        for data in person:
-            html += f'                    <td><pre>{person[data]}</pre></td>\n'
-        html += '            </tr>\n'
+        html += (
+            '            <tr>\n'
+            + '\n                    '.join(f'<td><pre>{person[data]}</pre></td>' for data in person)
+            + '\n            </tr>\n'
+        )
 
     html += r'''
             </tbody>
