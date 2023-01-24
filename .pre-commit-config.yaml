@@ -38,12 +38,12 @@ repos:
 
   # Changes tabs to spaces
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.3.1
+    rev: v1.4.1
     hooks:
       - id: remove-tabs
 
   - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.2.3
+    rev: 6.3.0
     hooks:
       - id: pydocstyle
         # exclude: (test_.*\.py)$
@@ -115,7 +115,7 @@ repos:
                                   flake8-secure-coding-standard]
 
   - repo: https://github.com/pycqa/pylint
-    rev: v2.16.0b0
+    rev: v2.16.0b1
     hooks:
       - id: pylint
         name: pylint-strict
