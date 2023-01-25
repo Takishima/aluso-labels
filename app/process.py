@@ -71,13 +71,13 @@ def process_people_list_get(ticket_names, ticket_ids):
     meal_option = EventFood.NOTHING
 
     for idx, (name, _) in enumerate(zip(ticket_names, ticket_checkboxes['postvisit'])):
-        if re.search(r'avec\s+(repas|souper|d[iî]ner)', name, re.IGNORECASE):
-            meal_option = EventFood.MEAL
+        if re.search(r'(avec|with)\s+(repas|souper|d[iî]ner|meal|lunch|dinner)', name, re.IGNORECASE):
+            meal_option = EventFood.MEAL if meal_option == EventFood.NOTHING else meal_option
             ticket_checkboxes['postvisit'][idx] = 'checked'
-        elif re.search(r'avec\s+ap[eé]ro', name, re.IGNORECASE):
-            meal_option = EventFood.APERO
+        elif re.search(r'(avec|with)\s+ap[eé]ro', name, re.IGNORECASE):
+            meal_option = EventFood.APERO if meal_option == EventFood.NOTHING else meal_option
             ticket_checkboxes['postvisit'][idx] = 'checked'
-        elif re.search(r'visite\s+(seule|uniquement)', name, re.IGNORECASE):
+        elif re.search(r'visite?\s+(seule|uniquement|only)', name, re.IGNORECASE):
             pass
 
     meal_radio_button = {'no_meal': '', 'apero': '', 'meal': ''}

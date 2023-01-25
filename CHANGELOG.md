@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-01-25
+
+### Added
+
+-   Simple help page with links to GitHub repository and issue pages.
+
+### Updated
+
+-   Update README file with some more information about data parsing and processing
+
+### Fixed
+
+-   Support English ticket names when doing automatic detection of ticket options (e.g. with or without meal, etc.)
+
+
 ## 2023-01-24
 
 ### Repository

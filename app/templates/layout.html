@@ -11,7 +11,9 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
 
         {% block head %}
-        <title>{% block title %}{% endblock %}</title>
+        <title>
+            {% block title %}{% endblock %}
+        </title>
         {% endblock %}
     </head>
     <body>
@@ -20,6 +22,9 @@
             {% block footer %}
             &copy; Copyright 2023 by Damien Nguyen <small>(version currently running is {{version}})</small>
             {% endblock %}
+            <div>
+                If you need some help, <a href="/help">click here</a>
+            </div>
         </div>
     </body>
 </html>

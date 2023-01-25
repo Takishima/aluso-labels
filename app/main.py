@@ -21,6 +21,7 @@ from flask import Flask
 
 from aluso_label.people import Person
 
+from .help import show_help
 from .process import process_people_list
 from .upload import upload_file
 
@@ -43,6 +44,7 @@ def create_app():
 
     aluso_app.add_url_rule('/', view_func=upload_file, methods=['GET', 'POST'])
     aluso_app.add_url_rule('/process', view_func=process_people_list, methods=['GET', 'POST'])
+    aluso_app.add_url_rule('/help', view_func=show_help, methods=['GET'])
     aluso_app.context_processor(add_version_info_to_template)
     return aluso_app
 
