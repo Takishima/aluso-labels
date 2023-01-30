@@ -6,13 +6,13 @@ A label generator to use when creating events from the EPFL Alumni Eastern Switz
 
 When reading the CSV file, the code is looking for the following column names:
 
-| Field description      | Field name (en) | Field name (fr) |
-|------------------------|-----------------|-----------------|
-| User unique identifier | ID user AF      | ID user AF      |
-| First name             | First name      | Prénom          |
-| Last name              | Family Name     | Nom de famille  |
-| Contribution status    | Contributor     | Cotisant        |
-| Ticket name            | Ticket name     | Nom du billet   |
+| Field description      | Field name (en) | Field name (fr)       |
+|------------------------|-----------------|-----------------------|
+| User unique identifier | ID user AF      | ID user AF            |
+| First name             | First name      | Prénom                |
+| Last name              | Family Name     | Nom de famille        |
+| Contribution status    | Contributor     | Cotisant/Contributeur |
+| Ticket name            | Ticket name     | Nom du billet         |
 
 NB: the matching is *case-sensitive*.
 

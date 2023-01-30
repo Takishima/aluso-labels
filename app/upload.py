@@ -40,7 +40,7 @@ def upload_file():
             'aluso_uid': ['ID user AF'],
             'first_name': ['Prénom', 'First name'],
             'last_name': ['Nom de famille', 'Family Name'],
-            'contribution_status': ['Cotisant', 'Contributor'],
+            'contribution_status': ['Cotisant', 'Contributeur', 'Contributor'],
             'ticket_name': ['Nom du billet', 'Ticket name'],
         }
 
