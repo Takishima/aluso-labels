@@ -121,6 +121,19 @@ def process_people_list_post(ticket_names, ticket_ids):
         person['participation_type'] = ticket_data[person['participation_type']]
         people.append(Person.from_dict(person))
 
+    def _sort_by_last_name(person: Person):
+        return person.last_name, person.first_name
+
+    def _sort_by_first_name(person: Person):
+        return person.first_name, person.last_name
+
+    # NB: By default, sort by last name and if equal, by first name
+    sort_func = _sort_by_last_name
+    if request.form['sort_type'] == 'first_name':
+        sort_func = _sort_by_first_name
+
+    people = sorted(people, key=sort_func)
+
     latex_code = generate_latex_document(
         Label[request.form['label_type'].replace(f'{Label.__name__}.', '')],
         EventType[request.form['event_type_visit']],
