@@ -13,17 +13,28 @@
 #   OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Main for Flask app."""
+"""Main for FastAPI app."""
 
 import os
 
-from flask import Flask
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseSettings
+from starlette.middleware.sessions import SessionMiddleware
 
 from aluso_label.people import Person
 
-from .help import show_help
-from .process import process_people_list
-from .upload import upload_file
+try:
+    from . import help_page, process, upload
+except ImportError:
+    from app import help_page, process, upload
+
+
+class Settings(BaseSettings):  # pylint: disable=too-few-public-methods
+    """Settings handler for web app."""
+
+    secret_key: str = 'dev'
+    committee_list: list[str]
 
 
 def add_version_info_to_template():
@@ -34,21 +45,13 @@ def add_version_info_to_template():
     return {'version': version}
 
 
-def create_app():
-    """Create and configure the application."""
-    aluso_app = Flask(__name__, instance_relative_config=True, template_folder='templates')
-    aluso_app.config.from_mapping(SECRET_KEY='dev')
-    aluso_app.config.from_prefixed_env()
+app = FastAPI(debug=True)
 
-    Person.COMMITTEE_LIST = {uid.strip() for uid in aluso_app.config.get('COMMITTEE_LIST', '').split(',')}
+settings = Settings()
+app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
+Person.COMMITTEE_LIST = set(settings.committee_list)
 
-    aluso_app.add_url_rule('/', view_func=upload_file, methods=['GET', 'POST'])
-    aluso_app.add_url_rule('/process', view_func=process_people_list, methods=['GET', 'POST'])
-    aluso_app.add_url_rule('/help', view_func=show_help, methods=['GET'])
-    aluso_app.context_processor(add_version_info_to_template)
-    return aluso_app
+app.mount("/static", StaticFiles(packages=[(__name__, 'static')]), name='static')
 
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run()
+app.include_router(upload.router)
+app.include_router(help_page.router)
