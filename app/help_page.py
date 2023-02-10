@@ -15,9 +15,17 @@
 
 """Help page utilities."""
 
-from flask import render_template
+from pathlib import Path
+
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+router = APIRouter(prefix='/help')
+templates = Jinja2Templates(directory=Path(__file__).parent / 'templates')
 
 
-def show_help():
+@router.get('/', response_class=HTMLResponse)
+async def show_help(request: Request):
     """Show the help page."""
-    return render_template('help.html')
+    return templates.TemplateResponse('help.html', {'request': request})
