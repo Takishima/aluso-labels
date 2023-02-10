@@ -17,7 +17,9 @@
 
 import dataclasses
 import enum
-from typing import ClassVar
+from typing import ClassVar, Union
+
+from ._utils import convert_flat_dataclass_to_pydantic
 
 
 class EventParticipation(enum.Flag):
@@ -38,11 +40,11 @@ class Person:
     last_name: str
     is_member: bool
     is_contributor: bool
-    participation_type: EventParticipation
+    participation_type: Union[str, EventParticipation]
     is_committee: bool = dataclasses.field(init=False)
 
-    # NB: This is to be initialized via an environment variable: FLASK_COMMITTEE_LIST
-    COMMITTEE_LIST: ClassVar[dict[str, str]] = {}
+    # NB: This is to be initialized via an environment variable: COMMITTEE_LIST
+    COMMITTEE_LIST: ClassVar[set[str]] = set()
 
     def __post_init__(self, aluso_uid):
         """Post-initialization routine."""
@@ -66,3 +68,27 @@ class Person:
         )
         person.is_committee = args['is_committee']
         return person
+
+    @staticmethod
+    def from_pydantic(pydantic_person):
+        """Convert from a pydantic Person to a Person."""
+        return Person(**({field.name: getattr(pydantic_person, field.name) for field in pydantic_person.__fields__}))
+
+    def to_pydantic(self):
+        """Convert a Person object to a PydanticPerson object."""
+        return NotImplemented
+
+
+PydanticPerson = convert_flat_dataclass_to_pydantic(Person)
+
+
+def to_pydantic(self):
+    """Convert a Person object to a PydanticPerson object."""
+    kwargs = {}
+    for field in dataclasses.fields(self.__class__):
+        kwargs[field.name] = getattr(self, field.name)
+
+    return PydanticPerson(**kwargs)
+
+
+setattr(Person, 'to_pydantic', to_pydantic)
