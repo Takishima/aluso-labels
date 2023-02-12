@@ -121,7 +121,7 @@ repos:
         name: pylint-strict
         # exclude: (test_.*\.py)$
         args: [--score=n, --load-plugins=pylint_secure_coding_standard]
-        additional_dependencies: [fastapi, starlette-wtf, pylint-secure-coding-standard]
+        additional_dependencies: [fastapi, starlette-wtf, dataclasses-json, pylint-secure-coding-standard]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: 'v0.991'

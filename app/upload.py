@@ -22,12 +22,13 @@ from pathlib import Path
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from starlette import status
 from starlette.datastructures import UploadFile
 from starlette_wtf import StarletteForm
 from wtforms import FileField, SubmitField
 from wtforms.validators import DataRequired, StopValidation
 
-from aluso_label.people import Person
+from aluso_label.people import Person, serialize_people
 
 router = APIRouter()
 templates = Jinja2Templates(directory=Path(__file__).parent / 'templates')
@@ -152,9 +153,9 @@ async def upload_file(request: Request):
                 )
             )
 
-        request.session['people'] = Person.schema().dumps(people, many=True)
+        request.session['people'] = serialize_people(people)
         request.session['ticket_names'] = sorted(ticket_names)
-        return RedirectResponse(request.url_for('process_people_list_get'))
+        return RedirectResponse(request.url_for('process_people_list_get'), status_code=status.HTTP_302_FOUND)
 
     # Something wrong happened -> resubmit current page
     return templates.TemplateResponse('upload.html', {'request': request, 'form': form})

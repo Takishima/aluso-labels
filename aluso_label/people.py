@@ -15,8 +15,13 @@
 
 """People related definitions."""
 
+# mypy: disable-error-code=attr-defined
+
+import base64
 import dataclasses
 import enum
+import json
+import zlib
 from typing import ClassVar, Union
 
 from dataclasses_json import dataclass_json
@@ -36,36 +41,36 @@ class EventParticipation(enum.Flag):
 class Person:
     """A person."""
 
-    aluso_uid: dataclasses.InitVar[str]
+    aluso_uid: str
     first_name: str
     last_name: str
     is_member: bool
     is_contributor: bool
     participation_type: Union[str, EventParticipation]
-    is_committee: bool = dataclasses.field(init=False)
 
     # NB: This is to be initialized via an environment variable: COMMITTEE_LIST
     COMMITTEE_LIST: ClassVar[set[str]] = set()
 
-    def __post_init__(self, aluso_uid):
+    def __post_init__(self):
         """Post-initialization routine."""
-        self.is_committee = aluso_uid in Person.COMMITTEE_LIST
-
         if not self.is_member and self.is_committee:
             raise RuntimeError('Cannot have a non-member as part of the committee!')
         if not self.is_member and self.is_contributor:
             raise RuntimeError('Cannot have a contributor non-member!')
 
-    @staticmethod
-    def from_dict(args):
-        """Initialize from a dictionary."""
-        person = Person(
-            '',
-            args['first_name'],
-            args['last_name'],
-            args['is_member'],
-            args['is_contributor'],
-            args['participation_type'],
-        )
-        person.is_committee = args['is_committee']
-        return person
+    @property
+    def is_committee(self):
+        """Test if person is member of the committee."""
+        return self.aluso_uid in Person.COMMITTEE_LIST
+
+
+def serialize_people(people: list[Person]):
+    """Serialize a list of people to a Base64 encoded compressed string."""
+    # pylint: disable=no-member
+    return base64.b64encode(zlib.compress(Person.schema().dumps(people, many=True).encode())).decode()
+
+
+def deserialize_people(data: str):
+    """Deserialize a list of people to a Base64 encoded compressed string."""
+    # pylint: disable=no-member
+    return [Person.from_dict(person) for person in json.loads(zlib.decompress(base64.b64decode(data)).decode())]
