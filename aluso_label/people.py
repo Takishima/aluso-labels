@@ -19,7 +19,7 @@ import dataclasses
 import enum
 from typing import ClassVar, Union
 
-from ._utils import convert_flat_dataclass_to_pydantic
+from dataclasses_json import dataclass_json
 
 
 class EventParticipation(enum.Flag):
@@ -31,6 +31,7 @@ class EventParticipation(enum.Flag):
     APERO = POST_VISIT
 
 
+@dataclass_json
 @dataclasses.dataclass
 class Person:
     """A person."""
@@ -68,27 +69,3 @@ class Person:
         )
         person.is_committee = args['is_committee']
         return person
-
-    @staticmethod
-    def from_pydantic(pydantic_person):
-        """Convert from a pydantic Person to a Person."""
-        return Person(**({field.name: getattr(pydantic_person, field.name) for field in pydantic_person.__fields__}))
-
-    def to_pydantic(self):
-        """Convert a Person object to a PydanticPerson object."""
-        return NotImplemented
-
-
-PydanticPerson = convert_flat_dataclass_to_pydantic(Person)
-
-
-def to_pydantic(self):
-    """Convert a Person object to a PydanticPerson object."""
-    kwargs = {}
-    for field in dataclasses.fields(self.__class__):
-        kwargs[field.name] = getattr(self, field.name)
-
-    return PydanticPerson(**kwargs)
-
-
-setattr(Person, 'to_pydantic', to_pydantic)

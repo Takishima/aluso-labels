@@ -20,7 +20,6 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from fastapi import APIRouter, Request
-from fastapi.encoders import jsonable_encoder
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.datastructures import UploadFile
@@ -110,6 +109,7 @@ async def upload_file(request: Request):
         ticket_names = set()
         people = []
         csv_data = await form.csv_file.data.read()
+
         for row in csv.DictReader(csv_data.decode().splitlines(), skipinitialspace=True):
             current_data = {}
             for field, options in data_fields.items():
@@ -149,10 +149,11 @@ async def upload_file(request: Request):
                     current_data['contribution_status'] != '',
                     current_data['contribution_status'] in ('Oui', 'Yes'),
                     current_data['ticket_name'],
-                ).to_pydantic()
+                )
             )
 
-        request.session.update({'people': jsonable_encoder(people), 'ticket_names': sorted(ticket_names)})
+        request.session['people'] = Person.schema().dumps(people, many=True)
+        request.session['ticket_names'] = sorted(ticket_names)
         return RedirectResponse(request.url_for('process_people_list_get'))
 
     # Something wrong happened -> resubmit current page
