@@ -54,4 +54,5 @@ Person.COMMITTEE_LIST = set(settings.committee_list)
 app.mount("/static", StaticFiles(packages=[(__name__, 'static')]), name='static')
 
 app.include_router(upload.router)
+app.include_router(process.router)
 app.include_router(help_page.router)

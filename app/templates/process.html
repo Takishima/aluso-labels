@@ -72,7 +72,7 @@
                 <small>These are the ticket types I have found within the CSV file. Choose for each one if it gives the participant access to the various event features.</small>
             </header>
 
-            {%for ticket, uid, visit_checked, postvisit_checked in zip(session['ticket_names'], ticket_ids, ticket_visit_checked, ticket_postvisit_checked)%}
+            {%for ticket, uid, visit_checked, postvisit_checked in zip(ticket_names, ticket_ids, ticket_visit_checked, ticket_postvisit_checked)%}
             <section>
                 <header>
                     <h3>{{ticket}}</h3>
@@ -247,7 +247,7 @@
 
         <div>
             <h3>Participants information</h3>
-            {{session['people_csv_html']|safe}}
+            {{people_csv_html|safe}}
         </div>
     </section>
 </main>

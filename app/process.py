@@ -16,12 +16,16 @@
 """LaTeX generation utilities."""
 
 import re
+from pathlib import Path
 
-from flask import redirect, render_template, request, session, url_for
+from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
+from starlette import status
 
 from aluso_label.event import EventFood, EventType
 from aluso_label.latex import LABEL_PROPERTIES, Label, generate_latex_document
-from aluso_label.people import EventParticipation, Person
+from aluso_label.people import EventParticipation, Person, deserialize_people
 
 
 def convert_people_list_to_html(people: dict) -> str:
@@ -35,7 +39,7 @@ def convert_people_list_to_html(people: dict) -> str:
             <thead>
             <tr>
     '''
-        + '\n                    '.join(f'<th>{key}</th>' for key in people[0])
+        + '\n                    '.join(f'<th>{key}</th>' for key in people[0].to_dict())
         + r'''
             </tr>
             </thead>
@@ -44,9 +48,10 @@ def convert_people_list_to_html(people: dict) -> str:
     )
 
     for person in people:
+        person_dict = person.to_dict()
         html += (
             '            <tr>\n'
-            + '\n                    '.join(f'<td><pre>{person[data]}</pre></td>' for data in person)
+            + '\n                    '.join(f'<td><pre>{person_dict[data]}</pre></td>' for data in person_dict)
             + '\n            </tr>\n'
         )
 
@@ -58,13 +63,31 @@ def convert_people_list_to_html(people: dict) -> str:
     return html
 
 
-def process_people_list_get(ticket_names, ticket_ids):
+def get_ticket_names_from_session(request: Request):
+    """Read ticket names from FastAPI session."""
+    ticket_names = request.session['ticket_names']
+    return ticket_names, [re.sub(r'[ -/\{}]', '_', name.lower()) for name in ticket_names]
+
+
+router = APIRouter(prefix='/process')
+templates = Jinja2Templates(directory=Path(__file__).parent / 'templates')
+
+
+@router.get('/')
+async def process_people_list_get(request: Request):
     """Process GET requests for the list of participants."""
-    session['people_csv_html'] = convert_people_list_to_html(session['people'])
+    try:
+        ticket_names, ticket_ids = get_ticket_names_from_session(request)
+    except KeyError:
+        return RedirectResponse('/', status_code=status.HTTP_302_FOUND)
+
+    people = deserialize_people(request.session['people'])
+    people_csv_html = convert_people_list_to_html(people)
     table_labels = [
-        f'td:nth-of-type({idx+1}):before {{ content: "{key}"; }}' for idx, key in enumerate(session['people'][0])
+        f'td:nth-of-type({idx+1}):before {{ content: "{key}"; }}'
+        for idx, key in enumerate(request.session['people'][0])
     ]
-    session['ticket_names_str'] = str(ticket_names)
+    request.session['ticket_names_str'] = str(ticket_names)
 
     ticket_checkboxes = {'visit': ['checked'] * len(ticket_ids), 'postvisit': [''] * len(ticket_ids)}
 
@@ -88,38 +111,53 @@ def process_people_list_get(ticket_names, ticket_ids):
     else:
         meal_radio_button['no_meal'] = 'checked'
 
-    return render_template(
+    return templates.TemplateResponse(
         'process.html',
-        ticket_ids=ticket_ids,
-        ticket_visit_checked=ticket_checkboxes['visit'],
-        ticket_postvisit_checked=ticket_checkboxes['postvisit'],
-        no_meal_checked=meal_radio_button['no_meal'],
-        apero_checked=meal_radio_button['apero'],
-        meal_checked=meal_radio_button['meal'],
-        str=str,
-        zip=zip,
-        table_style='\n'.join(table_labels),
-        label_properties=[(str(label_type), label_props.name) for label_type, label_props in LABEL_PROPERTIES.items()],
+        {
+            'request': request,
+            'ticket_names': ticket_names,
+            'ticket_ids': ticket_ids,
+            'ticket_visit_checked': ticket_checkboxes['visit'],
+            'ticket_postvisit_checked': ticket_checkboxes['postvisit'],
+            'no_meal_checked': meal_radio_button['no_meal'],
+            'apero_checked': meal_radio_button['apero'],
+            'meal_checked': meal_radio_button['meal'],
+            'str': str,
+            'zip': zip,
+            'table_style': '\n'.join(table_labels),
+            'label_properties': [
+                (str(label_type), label_props.name) for label_type, label_props in LABEL_PROPERTIES.items()
+            ],
+            'people_csv_html': people_csv_html,
+        },
     )
 
 
-def process_people_list_post(ticket_names, ticket_ids):
+@router.post('/')
+async def process_people_list_post(request: Request):
     """Process POST requests for the list of participants."""
+    try:
+        ticket_names, ticket_ids = get_ticket_names_from_session(request)
+    except KeyError:
+        return RedirectResponse('/', status_code=status.HTTP_302_FOUND)
+
+    form = await request.form()
+
+    people = deserialize_people(request.session['people'])
+
     ticket_data = {}
     for ticket, uid in zip(ticket_names, ticket_ids):
         participation_type = EventParticipation.NOTHING
-        if int(request.form.get(f'{uid}_visit', '0')):
+        if int(form.get(f'{uid}_visit', '0')):
             participation_type |= EventParticipation.VISIT
-        if int(request.form.get(f'{uid}_post_visit', '0')):
+        if int(form.get(f'{uid}_post_visit', '0')):
             participation_type |= EventParticipation.POST_VISIT
 
         participation_type ^= EventParticipation.NOTHING
         ticket_data[ticket] = participation_type
 
-    people = []
-    for person in session['people']:
-        person['participation_type'] = ticket_data[person['participation_type']]
-        people.append(Person.from_dict(person))
+    for person in people:
+        person.participation_type = ticket_data[person.participation_type]
 
     def _sort_by_last_name(person: Person):
         return person.last_name, person.first_name
@@ -129,34 +167,20 @@ def process_people_list_post(ticket_names, ticket_ids):
 
     # NB: By default, sort by last name and if equal, by first name
     sort_func = _sort_by_last_name
-    if request.form['sort_type'] == 'first_name':
+    if form['sort_type'] == 'first_name':
         sort_func = _sort_by_first_name
 
     people = sorted(people, key=sort_func)
 
     latex_code = generate_latex_document(
-        Label[request.form['label_type'].replace(f'{Label.__name__}.', '')],
-        EventType[request.form['event_type_visit']],
-        EventFood[request.form['event_type_post_visit']],
+        Label[form['label_type'].replace(f'{Label.__name__}.', '')],
+        EventType[form['event_type_visit']],
+        EventFood[form['event_type_post_visit']],
         people,
     )
 
     # Clear data from session if successful
-    del session['people']
-    del session['ticket_names']
+    del request.session['people']
+    del request.session['ticket_names']
 
-    return render_template('overleaf.html', latex_code=latex_code)
-
-
-def process_people_list():
-    """Process a list of participants."""
-    try:
-        ticket_names = session['ticket_names']
-    except KeyError:
-        return redirect(url_for('upload_file'))
-
-    ticket_ids = [re.sub(r'[ -/\{}]', '_', name.lower()) for name in ticket_names]
-
-    if request.method == 'GET':
-        return process_people_list_get(ticket_names, ticket_ids)
-    return process_people_list_post(ticket_names, ticket_ids)
+    return templates.TemplateResponse('overleaf.html', {'request': request, 'latex_code': latex_code})
