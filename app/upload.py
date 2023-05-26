@@ -54,8 +54,8 @@ def upload_file():
                         current_data[field] = row[option].strip()
                         break
                 else:
-                    options = [f'"{option}"' for option in options]
-                    form.form_errors = [f'Unable to parse CSV data for field {field} (tried {", ".join(options)})']
+                    str_options = [f'"{option}"' for option in options]
+                    form.form_errors = [f'Unable to parse CSV data for field {field} (tried {", ".join(str_options)})']
                     errors = [
                         ('p', form.form_errors[0]),
                         ('p', ' '),
@@ -66,7 +66,7 @@ def upload_file():
                                 'below were selected when exporting the CSV file?'
                             ),
                         ),
-                        ('li', options),
+                        ('li', str_options),
                     ]
                     return render_template('upload.html', form=form, errors=errors)
 
@@ -80,7 +80,7 @@ def upload_file():
                     current_data['aluso_uid'],
                     current_data['first_name'],
                     current_data['last_name'],
-                    current_data['contribution_status'] != '',
+                    bool(current_data['contribution_status']),
                     current_data['contribution_status'] in ('Oui', 'Yes'),
                     current_data['ticket_name'],
                 )

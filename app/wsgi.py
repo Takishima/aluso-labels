@@ -18,9 +18,10 @@
 # Set the path
 import os
 import sys
+from pathlib import Path
 
-sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..')))
-sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(str(Path(__file__).parent.parent.parent.resolve()))
+sys.path.append(str(Path(__file__).parent.parent.resolve()))
 
 from app.main import create_app  # noqa: E402  # pylint: disable=wrong-import-position
 

@@ -15,6 +15,8 @@
 
 """LaTeX generation utilities."""
 
+from __future__ import annotations
+
 import re
 
 from flask import redirect, render_template, request, session, url_for
@@ -121,10 +123,10 @@ def process_people_list_post(ticket_names, ticket_ids):
         person['participation_type'] = ticket_data[person['participation_type']]
         people.append(Person.from_dict(person))
 
-    def _sort_by_last_name(person: Person):
+    def _sort_by_last_name(person: Person) -> tuple[str, str]:
         return person.last_name, person.first_name
 
-    def _sort_by_first_name(person: Person):
+    def _sort_by_first_name(person: Person) -> tuple[str, str]:
         return person.first_name, person.last_name
 
     # NB: By default, sort by last name and if equal, by first name

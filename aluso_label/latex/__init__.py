@@ -23,7 +23,7 @@ from .label_properties import Label
 from .latex_document import LatexDocument
 
 
-def generate_latex_document(label_type: Label, event_type: EventType, event_food: EventFood, people: list[Person]):
+def generate_latex_document(label_type: Label, event_type: EventType, event_food: EventFood, people: list[Person]) -> LaTeXDocument:
     """Generate a LaTeX document."""
     document = LatexDocument(label_type, event_type, event_food)
     return document.generate(people)
