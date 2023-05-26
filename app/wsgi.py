@@ -19,8 +19,8 @@
 import os
 import sys
 
-sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), "..", "..")))
-sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.main import create_app  # noqa: E402  # pylint: disable=wrong-import-position
 

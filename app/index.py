@@ -15,4 +15,3 @@
 
 """Entry point for Vercel deployment."""
 
-from .wsgi import app  # pylint: disable=unused-import

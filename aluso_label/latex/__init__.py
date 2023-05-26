@@ -16,9 +16,10 @@
 
 """LaTeX utilities."""
 
-from ..event import EventFood, EventType
-from ..people import Person
-from .label_properties import LABEL_PROPERTIES, Label, LabelProperties
+from aluso_label.event import EventFood, EventType
+from aluso_label.people import Person
+
+from .label_properties import Label
 from .latex_document import LatexDocument
 
 
