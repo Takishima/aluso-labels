@@ -31,7 +31,7 @@ repos:
         alias: doc8-lint
         require_serial: false
         additional_dependencies: [tomli]
-        
+
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.9.0.2
     hooks:
