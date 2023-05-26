@@ -16,7 +16,6 @@
 """Web Server Gateway Interface module."""
 
 # Set the path
-import os
 import sys
 from pathlib import Path
 
