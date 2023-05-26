@@ -14,3 +14,5 @@
 #   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """Entry point for Vercel deployment."""
+
+from .wsgi import app # noqa: F401
