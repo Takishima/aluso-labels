@@ -25,7 +25,7 @@ from .latex_document import LatexDocument
 
 def generate_latex_document(
     label_type: Label, event_type: EventType, event_food: EventFood, people: list[Person]
-) -> LaTexDocument:
+) -> LatexDocument:
     """Generate a LaTeX document."""
     document = LatexDocument(label_type, event_type, event_food)
     return document.generate(people)
