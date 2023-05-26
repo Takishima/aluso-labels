@@ -19,7 +19,7 @@
 from aluso_label.event import EventFood, EventType
 from aluso_label.people import Person
 
-from .label_properties import Label
+from .label_properties import LABEL_PROPERTIES, Label, LabelProperties  # noqa: F401
 from .latex_document import LatexDocument
 
 
