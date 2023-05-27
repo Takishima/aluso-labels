@@ -37,7 +37,7 @@ def add_version_info_to_template():
 def create_app():
     """Create and configure the application."""
     aluso_app = Flask(__name__, instance_relative_config=True, template_folder='templates')
-    aluso_app.config.from_mapping(SECRET_KEY='dev')
+    aluso_app.config.from_mapping(SECRET_KEY='dev')  # noqa: S106
     aluso_app.config.from_prefixed_env()
 
     Person.COMMITTEE_LIST = {uid.strip() for uid in aluso_app.config.get('COMMITTEE_LIST', '').split(',')}

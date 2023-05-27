@@ -17,8 +17,9 @@
 
 import textwrap
 
-from ..event import EventFood, EventType
-from ..people import EventParticipation, Person
+from aluso_label.event import EventFood, EventType
+from aluso_label.people import EventParticipation, Person
+
 from .label_properties import LABEL_PROPERTIES, Label
 
 # ==============================================================================
@@ -62,15 +63,9 @@ def person_to_latex(person: Person, label_type: Label) -> str:
     if person.is_committee:
         member_icon += r'\ \committeeIcon'
 
-    if EventParticipation.VISIT in person.participation_type:
-        visit_icon = r'\visitIcon'
-    else:
-        visit_icon = r'\emptyIcon'
+    visit_icon = '\\visitIcon' if EventParticipation.VISIT in person.participation_type else '\\emptyIcon'
 
-    if EventParticipation.POST_VISIT in person.participation_type:
-        post_visit_icon = r'\postVisitIcon'
-    else:
-        post_visit_icon = r'\emptyIcon'
+    post_visit_icon = '\\postVisitIcon' if EventParticipation.POST_VISIT in person.participation_type else '\\emptyIcon'
 
     return rf'\addPerson{{{first_name}}}{{{last_name}}}{{{member_icon}}}{{{visit_icon}}}{{{post_visit_icon}}}'
 

@@ -15,4 +15,4 @@
 
 """Entry point for Vercel deployment."""
 
-from .wsgi import app  # pylint: disable=unused-import
+from .wsgi import app  # noqa: F401

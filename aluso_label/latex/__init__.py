@@ -16,13 +16,16 @@
 
 """LaTeX utilities."""
 
-from ..event import EventFood, EventType
-from ..people import Person
-from .label_properties import LABEL_PROPERTIES, Label, LabelProperties
+from aluso_label.event import EventFood, EventType
+from aluso_label.people import Person
+
+from .label_properties import LABEL_PROPERTIES, Label, LabelProperties  # noqa: F401
 from .latex_document import LatexDocument
 
 
-def generate_latex_document(label_type: Label, event_type: EventType, event_food: EventFood, people: list[Person]):
+def generate_latex_document(
+    label_type: Label, event_type: EventType, event_food: EventFood, people: list[Person]
+) -> LatexDocument:
     """Generate a LaTeX document."""
     document = LatexDocument(label_type, event_type, event_food)
     return document.generate(people)
