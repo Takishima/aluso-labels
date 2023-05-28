@@ -28,8 +28,10 @@ from aluso_label.people import Person
 class CSVFileUploadForm(FlaskForm):
     """CSV file input form."""
 
-    csv_file = FileField(label='CSV File', validators=[FileRequired(), FileAllowed(['csv', 'CSV'])])
-    submit = SubmitField(label='Upload')
+    csv_file = FileField(
+        label='CSV File', validators=[FileRequired(), FileAllowed(['csv', 'CSV'])], render_kw={'data-testid': 'file'}
+    )
+    submit = SubmitField(label='Upload', render_kw={'data-testid': 'submit'})
 
 
 def upload_file():
