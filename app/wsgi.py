@@ -22,7 +22,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent.resolve()))
 sys.path.append(str(Path(__file__).parent.parent.resolve()))
 
-from app.main import create_app  # noqa: E402  # pylint: disable=wrong-import-position
+from app.main import create_app  # pylint: disable=wrong-import-position
 
 app = create_app()
 
