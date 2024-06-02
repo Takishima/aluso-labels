@@ -40,7 +40,7 @@ repos:
         args: [-x, --severity=info]
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.6
+    rev: v2.3.0
     hooks:
       - id: codespell
         require_serial: false
@@ -52,7 +52,7 @@ repos:
       - id: yamllint
 
   - repo: https://github.com/psf/black
-    rev: 24.4.0
+    rev: 24.4.2
     hooks:
       - id: black
         language_version: python3
@@ -65,7 +65,7 @@ repos:
         additional_dependencies: [black==23.3.0]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.1
+    rev: v0.4.5
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix, --show-source, --show-fixes]
