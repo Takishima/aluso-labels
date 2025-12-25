@@ -25,6 +25,22 @@ from wtforms import FileField, SubmitField
 from aluso_label.people import Person
 
 
+def _decode_csv_data(data: bytes) -> str:
+    """Decode CSV binary data to string, trying multiple encodings.
+
+    Tries utf-8-sig first (handles UTF-8 with BOM and regular UTF-8),
+    then falls back to latin-1 which can decode any byte sequence
+    (common for Windows-generated CSV files with accented characters).
+    """
+    for encoding in ('utf-8-sig', 'latin-1'):
+        try:
+            return data.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    # latin-1 should never fail, but just in case, fall back to utf-8 with error handling
+    return data.decode('utf-8', errors='replace')
+
+
 class CSVFileUploadForm(FlaskForm):
     """CSV file input form."""
 
@@ -48,7 +64,7 @@ def upload_file():
 
         ticket_names = set()
         people = []
-        for row in csv.DictReader(form.csv_file.data.read().decode().splitlines(), skipinitialspace=True):
+        for row in csv.DictReader(_decode_csv_data(form.csv_file.data.read()).splitlines(), skipinitialspace=True):
             current_data = {}
             for field, options in data_fields.items():
                 for option in options:
