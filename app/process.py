@@ -64,7 +64,7 @@ def process_people_list_get(ticket_names, ticket_ids):
     """Process GET requests for the list of participants."""
     session['people_csv_html'] = convert_people_list_to_html(session['people'])
     table_labels = [
-        f'td:nth-of-type({idx+1}):before {{ content: "{key}"; }}' for idx, key in enumerate(session['people'][0])
+        f'td:nth-of-type({idx + 1}):before {{ content: "{key}"; }}' for idx, key in enumerate(session['people'][0])
     ]
     session['ticket_names_str'] = str(ticket_names)
 
