@@ -90,8 +90,7 @@ select = ['F',   # pyflakes
           'PL',  # pylint
           'RUF', # ruff-specific rules
 ]
-ignore = ['ANN101', # missing-type-self
-          'D203',   # one-blank-line-before-class
+ignore = ['D203',   # one-blank-line-before-class
           'D212',   # multi-line-summary-first-line
           'S603'    # subprocess-without-shell-equals-true
 ]
@@ -125,30 +124,6 @@ quote-style = 'preserve'
             '*_test.py',
             '*_fixtures.py'
         ]
-
-# --------------------------------------
-
-[tool.pylint]
-    [tool.pylint.master]
-    ignore-patterns = [
-        '.*_test.py',
-        '.*_fixtures.py',
-    ]
-
-    init-hook = '''from pylint.config import find_default_config_files;\
-    import os, sys; \
-    sys.path.append(os.path.dirname(list(find_default_config_files())[0]))'''
-
-    [tool.pylint.basic]
-    good-names = ['COMMITTEE_LIST']
-
-    [tool.pylint.format]
-    max-line-length = 120
-
-    [tool.pylint.typecheck]
-    ignored-modules = [
-        'wsgi',
-    ]
 
 # --------------------------------------
 
