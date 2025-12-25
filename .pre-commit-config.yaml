@@ -62,10 +62,10 @@ repos:
     hooks:
       - id: blacken-docs
         args: [-S, -l, '120']
-        additional_dependencies: [black==23.3.0]
+        additional_dependencies: [black==25.12.0]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.10
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix, --show-source, --show-fixes]
+        args: [--fix, --exit-non-zero-on-fix, --show-fixes]
