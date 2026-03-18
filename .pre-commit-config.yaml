@@ -40,7 +40,7 @@ repos:
         args: [-x, --severity=info]
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
       - id: codespell
         require_serial: false
@@ -52,7 +52,7 @@ repos:
       - id: yamllint
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.13
+    rev: v0.15.6
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix, --show-fixes]
